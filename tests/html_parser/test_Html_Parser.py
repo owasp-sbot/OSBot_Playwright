@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from osbot_playwritght.html_parser.Html_Parser import Html_Parser
+from osbot_playwright.html_parser.Html_Parser import Html_Parser
 
 
 class test_Html_Parser(TestCase):
