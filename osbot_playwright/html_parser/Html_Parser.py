@@ -54,7 +54,9 @@ class Html_Parser:
         return self.soup.title.string if self.soup.title else None
 
     def with_class(self, class_to_find):
-        return self.soup.find(class_=class_to_find).decode_contents()
+        match = self.soup.find(class_=class_to_find)
+        if match:
+            return match.decode_contents()
 
     def with_id(self, id_to_find):
         match = self.soup.find(id=id_to_find)
