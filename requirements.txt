@@ -1,1 +1,4 @@
+# for testing
+pytest
+coverage
 beautifulsoup4
