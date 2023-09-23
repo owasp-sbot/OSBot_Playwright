@@ -1,7 +1,10 @@
-# OWSBot
+# for OWSBot
 git+https://github.com/owasp-sbot/OSBot-Utils.git@develop
 python-dotenv
 
+# for playwright
+playwright
+psutil
 
 # for testing
 pytest
