@@ -10,7 +10,7 @@ from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 class test_Playwright_Page(TestCase):
     headless        : bool
     api_playwright  : API_Playwright
-    playwright_page : Playwright_Page
+    #playwright_page : Playwright_Page
 
     @classmethod
     def setUpClass(cls) -> None:

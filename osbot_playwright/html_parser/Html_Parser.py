@@ -50,6 +50,11 @@ class Html_Parser:
     def text_in_all__tag(self, tag):
         return [tag.text for tag in self.find_all(tag)]
 
+    def text_in_tag(self, tag):
+        match = self.soup.find(tag)
+        if match:
+            return match.text
+
     def title(self):
         return self.soup.title.string if self.soup.title else None
 
