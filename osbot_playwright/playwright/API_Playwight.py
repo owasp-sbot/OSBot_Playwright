@@ -18,6 +18,15 @@ class API_Playwright:
         if self.playwright_browser_chrome:
             return self.playwright_browser_chrome.stop_process()
 
+    def page(self):
+        pages = self.pages()
+        if pages:
+            return pages[0]
+        return self.new_page()
+
+    def pages(self):
+        return self.browser().pages()
+
     # def goto(self, url):
     #     page = self.page()
     #     return page.goto(url)
