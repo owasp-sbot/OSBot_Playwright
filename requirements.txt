@@ -1,3 +1,6 @@
+# OWSBot
+git+https://github.com/owasp-sbot/OSBot-Utils.git@develop
+
 # for testing
 pytest
 coverage
