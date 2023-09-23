@@ -16,5 +16,7 @@ jobs:
       - uses: actions/checkout@v3 #
       - name: Increment Tag (for DEV)
         uses: ./.github/actions/increment-tag-dev
+        with:
+          package_name: ${{ secrets.PACKAGE_NAME          }}
 
 

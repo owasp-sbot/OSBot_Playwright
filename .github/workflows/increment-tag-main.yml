@@ -12,5 +12,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Increment Tag - Main
         uses: ./.github/actions/increment-tag-main
+        with:
+          package_name: ${{ secrets.PACKAGE_NAME          }}
 
 
