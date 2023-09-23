@@ -1,5 +1,7 @@
 # OWSBot
 git+https://github.com/owasp-sbot/OSBot-Utils.git@develop
+python-dotenv
+
 
 # for testing
 pytest
