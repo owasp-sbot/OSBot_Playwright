@@ -1,12 +1,12 @@
 from playwright.sync_api import BrowserContext, Page
 
 from osbot_playwright.html_parser.Html_Parser import Html_Parser
-from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
-
 
 class Playwright_Page:
 
     def __init__(self, browser, context, page):
+        from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
+
         self.browser : Playwright_Chrome_Browser = browser
         self.context : BrowserContext            = context
         self.page    : Page                      = page
