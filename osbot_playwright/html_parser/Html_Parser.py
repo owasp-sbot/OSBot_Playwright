@@ -20,6 +20,22 @@ class Html_Parser:
         if match:
             return match.decode_contents()
 
+    def extract_elements(self, tag_type, attribute_name, key_name):
+        elements = self.soup.find_all(tag_type)
+        matches  = []
+        for element in elements:
+            if element.get(attribute_name):
+                element_dict = { key_name: element[attribute_name],
+                                'text'   : element.get_text()     }
+                matches.append(element_dict)
+        return matches
+
+    def options__values(self):
+        return self.extract_elements('option', 'value', 'value')
+
+    def hrefs__values(self):
+        return self.extract_elements('a', 'href', 'href')
+
     def id__content(self, id_to_find):
         return self.soup.find(id=id_to_find).contents
 
