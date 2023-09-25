@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from osbot_utils.utils.Misc import unique
 
 
 class Html_Parser:
@@ -55,11 +54,6 @@ class Html_Parser:
     def ids__text(self, id_to_find):
         return [tag.text for tag in self.find_all(id=id_to_find)]
 
-    def tag__attrs(self, tag):
-        match = self.soup.find(tag)
-        if match:
-            return match.attrs
-
     def find(self, *args, **kwargs):
         return self.soup.find(*args, **kwargs)
 
@@ -74,6 +68,11 @@ class Html_Parser:
 
     def paragraphs(self):
         return [paragraph.text.strip() for paragraph in self.find_all("p")]
+
+    def tag__attrs(self, tag):
+        match = self.soup.find(tag)
+        if match:
+            return match.attrs
 
     def tag__content(self, tag):
         return self.soup.find(tag).contents
@@ -91,18 +90,22 @@ class Html_Parser:
         if match:
             return match.text
 
+    def tags__attrs(self, tag):
+        elements = self.soup.find_all(tag)
+        result = []
+        for element in elements:
+            result.append(element.attrs)
+        return result
+
     def tags__content(self, tag):
         elements = self.soup.find_all(tag)
         result = []
         for element in elements:
             result.extend(element.contents)
-        return unique(result)
-
+        return result
 
     def tags__text(self, tag):
         return [tag.text for tag in self.find_all(tag)]
-
-
 
     def title(self):
         return self.soup.title.string if self.soup.title else None
