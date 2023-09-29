@@ -9,10 +9,14 @@ class Html_Parser:
     def __enter__(self): return self
     def __exit__ (self, type, value, traceback): pass
 
+    def id__attr(self, id_to_find, attr_name):
+        return self.id__attrs(id_to_find).get(attr_name)
+
     def id__attrs(self, id_to_find):
         match = self.soup.find(id=id_to_find)
         if match:
             return match.attrs
+        return {}
 
     def class__contents(self, class_to_find):
         match = self.soup.find(class_=class_to_find)
@@ -28,12 +32,6 @@ class Html_Parser:
                                 'text'   : element.get_text()     }
                 matches.append(element_dict)
         return matches
-
-    def options__values(self):
-        return self.extract_elements('option', 'value', 'value')
-
-    def hrefs__values(self):
-        return self.extract_elements('a', 'href', 'href')
 
     def id__content(self, id_to_find):
         return self.soup.find(id=id_to_find).contents
@@ -66,8 +64,9 @@ class Html_Parser:
     def html(self):
         return self.soup.prettify()
 
-    def paragraphs(self):
-        return [paragraph.text.strip() for paragraph in self.find_all("p")]
+    def select(self, query):
+        result = self.soup.select(query)
+        return [item.text for item in result]
 
     def tag__attrs(self, tag):
         match = self.soup.find(tag)
@@ -107,16 +106,26 @@ class Html_Parser:
     def tags__text(self, tag):
         return [tag.text for tag in self.find_all(tag)]
 
-    def title(self):
-        return self.soup.title.string if self.soup.title else None
+    # content helpers
 
+    def img_src(self, image_id): return self.id__attr(image_id, 'src')
 
+    def options(self):
+        return self.extract_elements('option', 'value', 'value')
+
+    def hrefs(self):
+        return self.extract_elements('a', 'href', 'href')
+
+    def hrefs__values(self):
+        return [link['href'] for link in self.hrefs()]
 
     def p(self): return self.paragraphs()
 
-    def select(self, query):
-        result = self.soup.select(query)
-        return [item.text for item in result]
+    def paragraphs(self):
+        return [paragraph.text.strip() for paragraph in self.find_all("p")]
+
+    def title(self):
+        return self.soup.title.string if self.soup.title else None
 
     def __repr__(self):
         return self.soup.prettify()
