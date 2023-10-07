@@ -104,7 +104,7 @@ class Html_Parser:
         return result
 
     def tags__text(self, tag):
-        return [tag.text for tag in self.find_all(tag)]
+        return [tag.text.strip() for tag in self.find_all(tag)] # todo: refactor to handle case when tag.text is None
 
     # content helpers
 
