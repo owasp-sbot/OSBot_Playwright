@@ -28,6 +28,13 @@ class Html_Parser:
         if match:
             return match.text
 
+    def class__texts(self, class_to_find):
+        elements = self.soup.find_all(class_=class_to_find)
+        matches = []
+        for element in elements:
+            matches.append(element.text)
+        return matches
+
     def extract_elements(self, tag_type, attribute_name, key_name):
         elements = self.soup.find_all(tag_type)
         matches  = []
