@@ -166,14 +166,14 @@ class Playwright_Chrome_Browser:
         context = self.context(index=context_index)
         if context:
             page = context.new_page()
-            return Playwright_Page(browser=self, context=context, page=page)
+            return Playwright_Page(context=context, page=page)
 
     def pages(self, context_index=0):
         pages = []
         context = self.context(index=context_index)
         if context:
             for page in context.pages:
-                pages.append(Playwright_Page(browser=self, context=context, page=page))
+                pages.append(Playwright_Page(context=context, page=page))
         return pages
 
     def page(self, context_index=0, page_index=0):

@@ -4,12 +4,12 @@ from osbot_playwright.html_parser.Html_Parser import Html_Parser
 
 class Playwright_Page:
 
-    def __init__(self, browser, context, page):
-        from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
-
-        self.browser : Playwright_Chrome_Browser = browser
+    def __init__(self, context, page):
         self.context : BrowserContext            = context
         self.page    : Page                      = page
+
+    def __repr__(self):
+        return f'[Playwright_Page]: {self.page.url}'
 
     def close(self):
         return self.page.close()
