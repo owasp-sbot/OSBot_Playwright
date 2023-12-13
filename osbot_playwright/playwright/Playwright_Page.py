@@ -1,6 +1,9 @@
 from playwright.sync_api import BrowserContext, Page
 
 from osbot_playwright.html_parser.Html_Parser import Html_Parser
+from osbot_utils.utils.Dev import pprint
+
+TMP_FILE__PLAYWRIGHT_SCREENSHOT = '/tmp/playwright_screenshot.png'
 
 class Playwright_Page:
 
@@ -29,6 +32,16 @@ class Playwright_Page:
 
     def open(self, url):
         return self.goto(url)
+
+    def screenshot(self, **kwargs):
+        if 'path' not in kwargs:
+            kwargs['path'] = TMP_FILE__PLAYWRIGHT_SCREENSHOT
+        self.screenshot_bytes(**kwargs)
+        return kwargs['path']
+
+    def screenshot_bytes(self, **kwargs):
+        return self.page.screenshot(**kwargs)
+
 
     def url(self):
         return self.page.url
