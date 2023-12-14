@@ -1,8 +1,10 @@
 import os
-from dotenv import load_dotenv
-from osbot_playwright.playwright.Playwright_Page import Playwright_Page
-from osbot_utils.decorators.methods.cache_on_self import cache_on_self
-from playwright.sync_api import sync_playwright
+
+import requests
+from dotenv                                         import load_dotenv
+from osbot_playwright.playwright.Playwright_Page    import Playwright_Page
+from osbot_utils.decorators.methods.cache_on_self   import cache_on_self
+from playwright.sync_api                            import sync_playwright
 
 class API_Browserless:
 
@@ -47,3 +49,59 @@ class API_Browserless:
 
     def wss_url(self):
         return f'wss://chrome.browserless.io?token={self.auth_key()}'
+
+    # todo move to separate class that is focused on these extra features provided by serverless
+
+    def content(self, target):
+        return self.requests_post('content', target).text
+
+    def pdf(self, target,width=1024, height=1024):
+        payload  =  { "url"      : target,
+                     "options"   : { "printBackground": True, "displayHeaderFooter": True},
+                     "viewport"  : { "width": width , "height": height} ,
+                      "gotoOptions": {"waitUntil": "networkidle2" },
+                      #"waitFor" : 15000
+                      }
+        url      = f"https://chrome.browserless.io/pdf?token={self.auth_key()}"
+        response = requests.post(url=url, json=payload)
+        return response.content
+
+    def pdf_html(self, html ,width=1024, height=1024):
+        payload  =  { "html"      : html,
+                     "options"   : { "printBackground": True, "displayHeaderFooter": True},
+                     "viewport"  : { "width": width , "height": height} ,
+                      "gotoOptions": {"waitUntil": "networkidle0" },
+                      #"waitFor" : 15000
+                      }
+        url      = f"https://chrome.browserless.io/pdf?token={self.auth_key()}"
+        response = requests.post(url=url, json=payload)
+        return response.content
+
+    def screenshot(self, target, full_page=True, quality=75, type='jpeg', width=1024, height=1024):
+        payload  =  { "url"      : target,
+                     "options"   : { "fullPage": full_page, "quality": quality, "type": type},
+                     "viewport"  : { "width": width , "height": height} ,
+                      #"gotoOptions": {"waitUntil": "networkidle2" },
+                      }
+        url      = f"https://chrome.browserless.io/screenshot?token={self.auth_key()}"
+        response = requests.post(url=url, json=payload)
+        return response.content
+
+
+
+    def stats(self, target):
+        payload  =  {"url": target}
+        url      = f"https://chrome.browserless.io/stats?token={self.auth_key()}"
+        response = requests.post(url=url, json=payload)
+        return response.json()
+
+    def requests_get(self, function):
+        url      = f"https://chrome.browserless.io/{function}?token={self.auth_key()}"
+        response = requests.get(url=url)
+        return response
+
+    def requests_post(self, function, target):
+        payload  =  {"url": target}
+        url      = f"https://chrome.browserless.io/{function}?token={self.auth_key()}"
+        response = requests.post(url=url, json=payload)
+        return response
