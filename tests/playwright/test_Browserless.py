@@ -1,5 +1,6 @@
 from unittest import TestCase
 
+import pytest
 from playwright.sync_api import Browser
 from osbot_playwright.playwright.API_Browserless import API_Browserless
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
@@ -76,44 +77,21 @@ class test_API_Browserless(TestCase):
         assert self.api_browserless.wss_url() == f'wss://chrome.browserless.io?token={self.api_browserless.auth_key()}'
 
 
+    @pytest.mark.skip('refactor into main api_browserless class and support for controlling where the file is saved')
+    def test_trace(self):
+        assert len(self.api_browserless.pages()) == 1
+        with self.api_browserless as page:
+            context = self.api_browserless.context()
+            context.tracing.start(screenshots=True, snapshots=True) # other options: name=name, title=title, sources=sources,
+            page.goto("https://www.google.com")
+            context.tracing.stop(path="trace.zip")
+            pprint(page.url())
+        assert len(self.api_browserless.pages()) == 1
 
 
-    # # experiment to try to load all images from a page
-    # def test_page__screenshot(self):
-    #     count = 0
-    #     def handle_request(request):
-    #         nonlocal count
-    #         count += 1
-    #         print(count,"A request was made:", request.url)
-    #         # Check if the request resource type is image
-    #         #if request.resource_type == "image":
-    #         #    image_urls.append(request.url)
-    #
-    #
-    #     url_target = 'https://thehackernews.com/'
-    #     file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.png'
-    #     page = self.api_browserless.page()
-    #     page.page.set_viewport_size({"width": 1024, "height": 4080});
-    #
-    #     page.page.on("requestfinished", handle_request)
-    #
-    #
-    #     page.open(url_target)
-    #
-    #     payload = {"path": file_target,
-    #                "full_page": True,
-    #                "quality": 5,
-    #                "type": "jpeg",
-    #                #"viewport": {"width": 1224, "height": 1512},
-    #                #"gotoOptions": {"waitUntil": "networkidle2"},
-    #                }
-    #
-    #     #wait_for(10)
-    #     bytes = page.screenshot(**payload)
-    #
-    #     pprint(f'saved screenshot to: {file_target} with {len(bytes)} bytes')
 
 
+    #########
     # extra browserless features
 
     # def test_content(self):
@@ -161,6 +139,8 @@ class test_API_Browserless(TestCase):
         assert file_exists(file_target)
 
 
+
+
     # def test_stats(self):
     #     url_target = 'https://www.google.com'
     #     file_target = f'/tmp/browserless_stats__{str_safe(url_target)}.json'
@@ -169,6 +149,40 @@ class test_API_Browserless(TestCase):
     #     pprint(stats)
     #     #pprint(stats)
 
+    # # experiment to try to load all images from a page
+    # def test_page__screenshot(self):
+    #     count = 0
+    #     def handle_request(request):
+    #         nonlocal count
+    #         count += 1
+    #         print(count,"A request was made:", request.url)
+    #         # Check if the request resource type is image
+    #         #if request.resource_type == "image":
+    #         #    image_urls.append(request.url)
+    #
+    #
+    #     url_target = 'https://thehackernews.com/'
+    #     file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.png'
+    #     page = self.api_browserless.page()
+    #     page.page.set_viewport_size({"width": 1024, "height": 4080});
+    #
+    #     page.page.on("requestfinished", handle_request)
+    #
+    #
+    #     page.open(url_target)
+    #
+    #     payload = {"path": file_target,
+    #                "full_page": True,
+    #                "quality": 5,
+    #                "type": "jpeg",
+    #                #"viewport": {"width": 1224, "height": 1512},
+    #                #"gotoOptions": {"waitUntil": "networkidle2"},
+    #                }
+    #
+    #     #wait_for(10)
+    #     bytes = page.screenshot(**payload)
+    #
+    #     pprint(f'saved screenshot to: {file_target} with {len(bytes)} bytes')
 
     def html_bootstrap(self):
         return """

@@ -32,6 +32,27 @@ class Playwright_Page:
             self.captured_requests.append(captured_request)
         self.page.on("requestfinished", capture_request)
 
+        # todo: add support for more events
+        #
+        # close             : Emitted when the page is closed.
+        # console           : Emitted when a console message is logged in the page.
+        # dialog            : Emitted when a dialog appears on the page (alert, prompt, confirm, or beforeunload).
+        # domcontentloaded  : Emitted when the DOMContentLoaded event is fired.
+        # download          : Emitted when a download begins on the page.
+        # error             : Emitted when an uncaught exception happens within the page.
+        # frameattached     : Emitted when a frame is attached to the page.
+        # framedetached     : Emitted when a frame is detached from the page.
+        # framenavigated    : Emitted when a frame is navigated to a new URL.
+        # load              : Emitted when the load event is fired (the page is fully loaded).
+        # pageerror         : Emitted when an uncaught exception happens within the page and is bubbled up to the window object.
+        # popup             : Emitted when a new page is created by window.open or when a link with target=_blank is clicked.
+        # request           : Emitted when a network request is made by the page.
+        # requestfailed     : Emitted when a network request fails.
+        # requestfinished   : Emitted when a network request is successfully completed.
+        # response          : Emitted when a network response is received.
+        # websocket         : Emitted when the page creates a WebSocket connection.
+        # worker            : Emitted when a Web Worker is created by the page.
+
     def close(self):
         return self.page.close()
 

@@ -9,7 +9,16 @@ from playwright.sync_api                            import sync_playwright
 class API_Browserless:
 
     def __init__(self):
-        pass
+        self.current_page = None
+
+    def __enter__(self):
+        self.current_page = self.new_page()
+        return self.current_page
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.current_page.close()
+
+
 
     @cache_on_self
     def auth_key(self):
