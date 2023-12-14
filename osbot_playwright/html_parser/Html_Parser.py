@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 
+from osbot_utils.utils.Json import json_parse
+
 
 class Html_Parser:
 
@@ -8,6 +10,9 @@ class Html_Parser:
 
     def __enter__(self): return self
     def __exit__ (self, type, value, traceback): pass
+
+    def body(self):
+        return self.soup.body
 
     def id__attr(self, id_to_find, attr_name):
         return self.id__attrs(id_to_find).get(attr_name)
@@ -64,6 +69,9 @@ class Html_Parser:
     def ids__text(self, id_to_find):
         return [tag.text for tag in self.find_all(id=id_to_find)]
 
+    def json(self):
+        return json_parse(self.text())
+
     def find(self, *args, **kwargs):
         return self.soup.find(*args, **kwargs)
 
@@ -117,6 +125,9 @@ class Html_Parser:
 
     def tags__text(self, tag):
         return [tag.text.strip() for tag in self.find_all(tag)] # todo: refactor to handle case when tag.text is None
+
+    def text(self):
+        return self.body().text
 
     # content helpers
 

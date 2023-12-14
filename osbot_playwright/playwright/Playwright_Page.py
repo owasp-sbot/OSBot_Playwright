@@ -59,6 +59,9 @@ class Playwright_Page:
     def goto(self, *args, **kwargs):
         return self.page.goto(*args, **kwargs)
 
+    def json(self):
+        return self.html().json()
+
     def html_raw(self):
         return self.page.content()
 
