@@ -88,8 +88,8 @@ class API_Browserless:
 
     def screenshot(self, target, full_page=True, quality=75, type='jpeg', width=1024, height=1024):
         payload  =  { "url"      : target,
-                     "options"   : { "fullPage": full_page, "quality": quality, "type": type},
-                     "viewport"  : { "width": width , "height": height} ,
+                      "options"   : { "fullPage": full_page, "quality": quality, "type": type},
+                      "viewport"  : { "width": width , "height": height} ,
                       #"gotoOptions": {"waitUntil": "networkidle2" },
                       }
         url      = f"https://chrome.browserless.io/screenshot?token={self.auth_key()}"

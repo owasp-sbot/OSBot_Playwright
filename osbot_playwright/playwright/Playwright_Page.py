@@ -56,6 +56,9 @@ class Playwright_Page:
     def close(self):
         return self.page.close()
 
+    def closed(self):
+        return self.page.is_closed()
+
     def goto(self, *args, **kwargs):
         return self.page.goto(*args, **kwargs)
 
@@ -71,9 +74,11 @@ class Playwright_Page:
     def title(self):
         return self.page.title()
 
-
     def open(self, url, **kwargs):
         return self.goto(url, **kwargs)
+
+    def open__google(self, path):
+        return self.open('https://www.google.com/' + path)
 
     def screenshot(self, **kwargs):
         if 'path' not in kwargs:
@@ -84,7 +89,9 @@ class Playwright_Page:
     def screenshot_bytes(self, **kwargs):
         return self.page.screenshot(**kwargs)
 
-
+    def set_html(self, html):
+        self.page.set_content(html)
+        return self
     def url(self):
         return self.page.url
 
