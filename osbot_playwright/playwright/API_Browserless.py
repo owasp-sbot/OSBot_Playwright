@@ -10,6 +10,7 @@ class API_Browserless:
 
     def __init__(self):
         self.current_page = None
+        self.playwright   =  None
 
     def __enter__(self):
         self.current_page = self.new_page()
@@ -19,7 +20,6 @@ class API_Browserless:
         self.current_page.close()
 
 
-
     @cache_on_self
     def auth_key(self):
         load_dotenv()
@@ -27,7 +27,13 @@ class API_Browserless:
 
     @cache_on_self
     def browser(self):
-        return sync_playwright().start().chromium.connect_over_cdp(self.wss_url())
+        self.playwright = sync_playwright().start()
+        return self.playwright.chromium.connect_over_cdp(self.wss_url())
+
+    def close(self):
+        if self.playwright:
+            self.playwright.stop()
+        return self.playwright
 
     def context(self, index=0):
         contexts = self.contexts()
@@ -55,6 +61,7 @@ class API_Browserless:
         pages = self.pages(context_index=context_index)
         if pages and len(pages) > page_index:
             return pages[page_index]
+
 
     def wss_url(self):
         return f'wss://chrome.browserless.io?token={self.auth_key()}'
