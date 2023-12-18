@@ -1,35 +1,25 @@
-from playwright.sync_api import BrowserContext, Page
-
-from osbot_playwright.html_parser.Html_Parser import Html_Parser
-from osbot_utils.utils.Dev import pprint
-from osbot_utils.utils.Misc import obj_info
+from playwright.sync_api                             import BrowserContext, Page
+from osbot_playwright.html_parser.Html_Parser        import Html_Parser
+from osbot_playwright.playwright.Playwright_Requests import Playwright_Requests
 
 TMP_FILE__PLAYWRIGHT_SCREENSHOT = '/tmp/playwright_screenshot.png'
 
 class Playwright_Page:
 
     def __init__(self, context, page):
-        self.context           : BrowserContext            = context
-        self.page              : Page                      = page
-        self.captured_requests : list                      = []
+        self.context           : BrowserContext = context
+        self.page              : Page           = page
+        self.requests          = Playwright_Requests()
+
+    def __enter__(self                           ): return self
+    def __exit__ (self, exc_type, exc_val, exc_tb): pass
 
     def __repr__(self):
         return f'[Playwright_Page]: {self.page.url}'
 
     def capture_requests(self):
         def capture_request(request):
-            captured_request = { 'frame'          : {'name': request.frame.name,
-                                                     'url': request.frame.url  } ,
-                                 'headers'        : request.headers              ,
-                                 'method'         : request.method               ,
-                                 'post_data'      : request.post_data            ,
-                                 'post_data_json' : request.post_data_json       ,
-                                 'redirected_from': request.redirected_from      ,
-                                 'redirected_to'  : request.redirected_to        ,
-                                 'resource_type'  : request.resource_type        ,
-                                 'timing'         : request.timing               ,
-                                 'url'            : request.url                  }
-            self.captured_requests.append(captured_request)
+            self.requests.capture_request(request)
         self.page.on("requestfinished", capture_request)
 
         # todo: add support for more events
@@ -78,7 +68,13 @@ class Playwright_Page:
         return self.goto(url, **kwargs)
 
     def open__google(self, path):
-        return self.open('https://www.google.com/' + path)
+        return self.open('https://www.google.com/' + str(path))
+
+    def playwright_page(self):
+        return self.page
+
+    def refresh(self):
+        self.open(self.url())
 
     def screenshot(self, **kwargs):
         if 'path' not in kwargs:

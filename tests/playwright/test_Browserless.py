@@ -23,6 +23,10 @@ class test_API_Browserless(TestCase):
 
         assert type(cls.browser) is Browser
 
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls.api_browserless.close()
+
     def test_api_key(self):
         assert type(self.api_browserless.auth_key()) is str
 
@@ -60,10 +64,10 @@ class test_API_Browserless(TestCase):
     def test_page_capture_requests(self):
         assert len(self.api_browserless.pages()) == 1
         page = self.api_browserless.new_page()
-        assert len(page.captured_requests) == 0
+        assert len(page.requests.requests) == 0
         page.capture_requests()
         page.open('https://www.google.com')
-        assert len(page.captured_requests) > 10
+        assert len(page.requests.requests)  > 10
         page.close()
         assert len(self.api_browserless.pages()) == 1
 

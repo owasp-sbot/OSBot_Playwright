@@ -8,13 +8,11 @@ from osbot_utils.utils.Files import file_exists
 from osbot_utils.utils.Json import json_parse
 from osbot_utils.utils.Misc import wait_for, list_set
 from osbot_utils.utils.Python_Logger import logger_info
-from playwright.sync_api import BrowserType, Browser, BrowserContext
+from playwright.sync_api import BrowserType, Browser, BrowserContext, Error
 
 from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 from playwright.sync_api import Page
-
-Error = playwright._impl._api_types.Error
 
 class test_Playwright_Chrome_Browser(TestCase):
 
