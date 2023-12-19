@@ -15,14 +15,15 @@ from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 from playwright.sync_api import Page
 
 class test_Playwright_Chrome_Browser(TestCase):
-
+    headless                  : bool
     playwright_chrome_browser : Playwright_Chrome_Browser           # so that we don't get a warning in the @classmethod(s)
 
     # this method is called only once for this class
     @classmethod
     def setUpClass(cls) -> None:
+        cls.headless = True
         cls.log_info = logger_info()
-        with Playwright_Chrome_Browser(headless=True) as _:
+        with Playwright_Chrome_Browser(headless=cls.headless) as _:
             _.delete_browser_data_folder()
             _.start_process()
             assert _.setup() == True

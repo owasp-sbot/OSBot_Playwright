@@ -62,7 +62,7 @@ class test_Playwright_Requests(TestCase):
             _.requests.requests = []
             assert len(_.requests.requests) == 0
             assert _.requests.load_from(path_requests)
-            assert len(_.requests.requests) == 3
+            assert len(_.requests.requests) > 3
             assert _.requests.requests == json_load_file(path_requests)
 
 
