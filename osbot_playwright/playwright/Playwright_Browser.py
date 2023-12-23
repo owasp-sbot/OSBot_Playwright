@@ -6,11 +6,8 @@ class Playwright_Browser:
         self.headless    = headless
         self.__playwright = None
 
-    def browser_chrome(self):               # todo refactor into separate class
-        return self.playwright().chromium
-
-    def browser_firefox(self):              # todo refactor into separate class
-        return self.playwright().firefox
+    # def browser_firefox(self):              # todo refactor into separate class
+    #     return self.playwright().firefox
 
     def event_loop(self):
         if self.__playwright:

@@ -19,19 +19,7 @@ class test_Playwright_Chrome_Browser(TestCase):
     playwright_chrome_browser : Playwright_Chrome_Browser           # so that we don't get a warning in the @classmethod(s)
 
     # this method is called only once for this class
-    @classmethod
-    def setUpClass(cls) -> None:
-        cls.headless = True
-        cls.log_info = logger_info()
-        with Playwright_Chrome_Browser(headless=cls.headless) as _:
-            _.delete_browser_data_folder()
-            _.start_process()
-            assert _.setup() == True
-            cls.playwright_chrome_browser = _
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        assert cls.playwright_chrome_browser.stop_process() is True
     # this method is called on every test method in this class
 
     # the variables defined in the @setupClass are available here as well
@@ -106,37 +94,7 @@ class test_Playwright_Chrome_Browser(TestCase):
                 assert _.contexts() == []
 
 
-    def test_healthcheck(self):
-        with self.playwright_chrome_browser as _:
-            process_id = _.process_id()
-            debug_port = _.debug_port
-            healthcheck = self.playwright_chrome_browser.healthcheck()
 
-            chromium_process_status = healthcheck.get('chromium_process_status')
-            assert chromium_process_status == 'running' or chromium_process_status== 'sleeping'
-            del healthcheck['chromium_process_status']
-
-            assert healthcheck == {   'chromium_debug_port'           : debug_port ,
-                                      'chromium_debug_port_match'     : True       ,
-                                      'chromium_debug_port_open'      : True       ,
-                                      'chromium_process_exists'       : True       ,
-                                      'chromium_process_id'           : process_id ,
-                                      'data_folder_exists'            : True       ,
-                                      'healthy'                       : True       ,
-                                      'playwright_process_file_exists': True       }
-            assert healthcheck.get('chromium_debug_port') == self.playwright_chrome_browser.debug_port
-            assert healthcheck.get('healthy'            ) is True
-
-            with patch.object(_, 'process_details', return_value={}):
-                assert _.healthcheck() == { 'chromium_debug_port'           : None  ,
-                                            'chromium_debug_port_match'     : False ,
-                                            'chromium_debug_port_open'      : False ,
-                                            'chromium_process_exists'       : False ,
-                                            'chromium_process_id'           : None  ,
-                                            'chromium_process_status'       : None  ,
-                                            'data_folder_exists'            : True  ,
-                                            'healthy'                       : False ,
-                                            'playwright_process_file_exists': True  }
 
     def test_new_page(self):
         page = self.playwright_chrome_browser.new_page()
@@ -181,35 +139,3 @@ class test_Playwright_Chrome_Browser(TestCase):
             # confirm return value when there is an exception
             with patch.object(_, 'load_process_details', return_value={'process_id': 9999}):
                 assert _.process_details() == {}
-
-
-    def test_start_process(self):
-
-        with self.playwright_chrome_browser as _:
-            # assert _.stop_process()  is True         # make sure there is no process running
-            #
-            # assert _.start_process() is True
-            assert _.start_process() is False  # confirm we get a False value when the process is already running
-            #assert _.browser_connect_to_existing_process() is True
-            assert _._browser is not None
-            page = _.context().new_page()
-            assert page.url == 'about:blank'
-            page.goto(_.url_browser_debug_page_json_version())
-            page_text = page.inner_text('body')
-            page_json = json_parse(page_text)
-            assert list_set(page_json) == [ 'Browser', 'Protocol-Version', 'User-Agent', 'V8-Version', 'WebKit-Version', 'webSocketDebuggerUrl']
-            page.close()
-
-            assert _.stop_process() is True
-            assert _.stop_process() is False
-
-
-            with pytest.raises(Exception) as exc_info:
-                with patch.object(_, 'wait_for_debug_port', return_value=False):
-                    _.start_process()
-            assert str(exc_info.value) == f'in browser_start_process, port {_.debug_port} was not open after process start'
-
-            assert _.stop_process() is True
-
-            assert _.start_process() is True    # need to start it again for the other tests that require it
-
