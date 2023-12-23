@@ -2,6 +2,7 @@ import asyncio
 from unittest import TestCase
 
 import playwright
+import pytest
 from playwright.sync_api import sync_playwright
 
 from osbot_playwright.playwright.API_Browserless import API_Browserless
@@ -11,6 +12,7 @@ from osbot_utils.utils.Files import file_exists
 from osbot_utils.utils.Json import json_save, json_load, json_save_file, json_load_file
 
 
+@pytest.mark.skip('remove browserless dependency')
 class test_Playwright_Requests(TestCase):
     api_browserless : API_Browserless
 

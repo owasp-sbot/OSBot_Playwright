@@ -105,7 +105,7 @@ class test_Playwright_Process(TestCase):
     def test_process_details(self):
         process_details = self.playwright_process.process_details()
         assert list_set(process_details) == ['created_at'  , 'debug_port', 'headless'     ,
-                                             'process_args', 'process_id', 'reuse_browser', 'status']
+                                             'process_args', 'process_id', 'reuse_browser', 'status','url']
 
 
     def test_start_process(self):

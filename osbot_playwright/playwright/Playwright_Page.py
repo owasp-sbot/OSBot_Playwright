@@ -44,9 +44,10 @@ class Playwright_Page:
         # worker            : Emitted when a Web Worker is created by the page.
 
     def close(self):
-        return self.page.close()
+        self.page.close()
+        return self.is_closed()
 
-    def closed(self):
+    def is_closed(self):
         return self.page.is_closed()
 
     def goto(self, *args, **kwargs):

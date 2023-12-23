@@ -3,6 +3,7 @@ from unittest import TestCase
 from osbot_utils.testing.Trace_Call import trace_calls
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Python_Logger           import logger_info
+from playwright.sync_api import Browser, Page
 
 from osbot_playwright.playwright.API_Playwight import API_Playwright
 from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
@@ -23,14 +24,28 @@ class test_API_Playwright(TestCase):
         assert cls.api_playwright.browser_close() is True
 
     def test_browser(self):
-        assert type(self.api_playwright.browser()) is Playwright_Chrome_Browser
+        assert type(self.api_playwright.browser()) is Browser
 
     def test_new_page(self):
         page = self.api_playwright.new_page()
         assert type(page) is Playwright_Page
-        assert page.url()  == 'about:blank'
-        pprint(page.close())
-        pprint(page.close())
+        assert page.url()    == 'about:blank'
+        assert page.is_closed() is False
+        assert page.close    () is True
+
+    def test_page(self):
+        target_url     = 'https://www.google.com/404'
+        expected_title = 'Error 404 (Not Found)!!1'
+        page = self.api_playwright.page()
+        assert type(page)                       is Playwright_Page
+        assert page.url      ()                 == 'about:blank'
+        assert page.open     (target_url).url   == target_url
+        assert page.url      ()                 == target_url
+        assert page.html     ().title()         == expected_title
+        assert page.is_closed()                 is False
+        assert page.close    ()                 is True
+
+
 
     # @sync
     # async def test_page(self):

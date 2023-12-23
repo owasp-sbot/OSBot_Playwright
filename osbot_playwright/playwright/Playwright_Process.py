@@ -110,6 +110,7 @@ class Playwright_Process:
             try:
                 process = psutil.Process(process_id)
                 process_details['status'] = process.status()                # add the status to the data loaded from disk
+                process_details['url'   ] = self.url_browser_debug_page()   # add the url to the data loaded from disk
                 return process_details
             except psutil.NoSuchProcess:
                 pass

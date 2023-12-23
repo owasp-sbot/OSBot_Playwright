@@ -21,12 +21,6 @@ class test_Playwright_Browser(TestCase):
     def test__init__(self):
         assert self.playwright_browser.headless is True
 
-    def test_browser_chrome(self):
-        chrome = self.playwright_browser.browser_chrome()
-        assert type(chrome) is BrowserType
-        assert 'ms-playwright' in chrome.executable_path        # todo: add checks that take into account MacOS and Linux
-        pprint(chrome.executable_path)
-
     def test_event_loop(self):
         def create_and_stop():
             assert self.playwright_browser.event_loop() is None

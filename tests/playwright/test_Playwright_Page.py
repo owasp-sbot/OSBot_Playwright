@@ -21,7 +21,6 @@ class test_Playwright_Page(TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         assert cls.api_playwright.browser_close() is True
-        cls.page.close()
 
 
     def test_ctor(self):

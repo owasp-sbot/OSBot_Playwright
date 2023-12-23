@@ -26,6 +26,8 @@ CHROMIUM_PARAM_DEBUG_PORT  = "--remote-debugging-port"
 CHROMIUM_PARAM_DATA_FOLDER = "--user-data-dir"
 CHROMIUM_PARAM_HEADLESS    = "--headless"
 
+
+# todo: refactor this class to use API_Playwright
 class Playwright_Chrome_Browser:
 
     def __init__(self, headless=True, reuse_browser=True, debug_port=DEFAULT_VALUE_DEBUG_PORT):
@@ -136,9 +138,6 @@ class Playwright_Chrome_Browser:
         #healthcheck = self.healthcheck()
         #if healthcheck.get('healthy') is True:
         #    return healthcheck.get('chromium_process_id')
-
-
-
 
 
     def setup(self):

@@ -7,7 +7,7 @@ from osbot_utils.utils.Misc import list_set
 from osbot_playwright.playwright.Playwright_CLI import Playwright_CLI, VERSION_PLAYWRIGHT
 
 
-class test_Playwright_CLI(TestCase):
+class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use AAA to make sure this is the first class to execute (making sure that chrome is installed
 
     def setUp(self):
         self.playwright_cli = Playwright_CLI()

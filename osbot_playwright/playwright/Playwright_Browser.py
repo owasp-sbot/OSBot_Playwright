@@ -6,12 +6,19 @@ class Playwright_Browser:
         self.headless    = headless
         self.__playwright = None
 
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
+
     # def browser_firefox(self):              # todo refactor into separate class
     #     return self.playwright().firefox
 
     def event_loop(self):
         if self.__playwright:
             return self.__playwright._loop
+
+    def event_loop_closed(self):
+        event_loop = self.event_loop()
+        return event_loop is None or event_loop._closed is True
 
     def playwright(self):
         if self.__playwright is None:

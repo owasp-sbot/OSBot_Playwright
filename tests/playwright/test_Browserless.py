@@ -12,6 +12,7 @@ from osbot_utils.utils.Misc import wait_for
 from osbot_utils.utils.Str import str_safe
 
 
+@pytest.mark.skip('change so that only use Browserless in QA tests')
 class test_API_Browserless(TestCase):
     api_browserless : API_Browserless()
     browser         : Browser

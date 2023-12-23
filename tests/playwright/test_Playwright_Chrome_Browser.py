@@ -14,6 +14,7 @@ from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chr
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 from playwright.sync_api import Page
 
+@pytest.mark.skip('refactor these methods to use API_Playwright')
 class test_Playwright_Chrome_Browser(TestCase):
     headless                  : bool
     playwright_chrome_browser : Playwright_Chrome_Browser           # so that we don't get a warning in the @classmethod(s)

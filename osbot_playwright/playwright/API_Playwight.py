@@ -1,22 +1,30 @@
+from osbot_utils.decorators.methods.cache_on_self import cache_on_self
+from playwright.sync_api import Browser
+
+from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
+from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
 
 class API_Playwright:
 
     def __init__(self, headless=True):
-        self.headless                  : bool                      = headless
-        self.playwright_browser_chrome : Playwright_Chrome_Browser = None
+        self.headless                  = headless
+        self.playwright_browser_chrome =  Playwright_Browser__Chrome()
 
     #@cache_on_self
-    def browser(self) -> Playwright_Chrome_Browser:
-        if self.playwright_browser_chrome is None:
-            self.playwright_browser_chrome = Playwright_Chrome_Browser(headless=self.headless)
-            self.playwright_browser_chrome.setup()
-        return self.playwright_browser_chrome
+    # def browser(self) -> Playwright_Chrome_Browser:
+    #     if self.playwright_browser_chrome is None:
+    #         self.playwright_browser_chrome = Playwright_Chrome_Browser(headless=self.headless)
+    #         self.playwright_browser_chrome.setup()
+    #     return self.playwright_browser_chrome
+
+    @cache_on_self
+    def browser(self) -> Browser :
+        return self.playwright_browser_chrome.browser()
 
     def browser_close(self):
-        if self.playwright_browser_chrome:
-            return self.playwright_browser_chrome.stop_process()
+        return self.playwright_browser_chrome.stop_playwright_and_process()
 
     def page(self):
         pages = self.pages()
@@ -25,7 +33,7 @@ class API_Playwright:
         return self.new_page()
 
     def pages(self):
-        return self.browser().pages()
+        return self.browser().contexts[0].pages
 
     # def goto(self, url):
     #     page = self.page()
@@ -34,7 +42,9 @@ class API_Playwright:
     def new_page(self):
         browser = self.browser()
         if browser:
-            return browser.new_page()
+            context = browser.contexts[0]
+            page = context.new_page()
+            return Playwright_Page(context=context, page=page)
 
 
     # def url(self):
