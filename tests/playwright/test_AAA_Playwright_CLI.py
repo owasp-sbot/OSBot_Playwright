@@ -30,11 +30,11 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
     def test_executable_path__chrome(self):
         executable_path      = self.playwright_cli.executable_path__chrome()
         parent_folder_path   = parent_folder(executable_path)
-        #pprint(executable_path)
+        pprint(executable_path)
         #pprint(parent_folder_path)
         #pprint(files_find     (parent_folder_path))
-        pprint(files_recursive(parent_folder_path))
-        #assert file_exists(executable_path)
+        #pprint(files_recursive(parent_folder_path))
+        assert file_exists(executable_path)
 
     def test_executable_version__chrome(self):
         version = self.playwright_cli.executable_version__chrome()
