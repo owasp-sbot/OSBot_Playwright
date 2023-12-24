@@ -26,3 +26,17 @@ class Playwright_Requests:
 
     def save_to(self, path=None):
         return json_save_file(python_object=self.requests, path=path)
+
+
+    # todo: add support for also capturing console messages
+    # def handle_console_message(msg):
+    #         obj_info(msg)
+    #         # You can filter out messages by type (msg.type) or text content (msg.text)
+    #         if "Autofocus processing was blocked" in msg.text:
+    #             return True # Ignore this specific message
+    #         # if "Permissions policy violation" in msg.text:
+    #         #     return
+    #
+    #         print('----', msg.text)
+    #
+    #     raw_page.on("console", handle_console_message)

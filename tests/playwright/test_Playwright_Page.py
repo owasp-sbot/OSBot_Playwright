@@ -1,55 +1,59 @@
 from unittest import TestCase
 
-from osbot_utils.utils.Misc import random_text
+import pytest
+from osbot_utils.utils.Dev import pprint
+from osbot_utils.utils.Misc import random_text, obj_info
 from playwright.sync_api import Response
 
 from osbot_playwright.playwright.API_Playwight import API_Playwright
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
-# todo: fix these tests
+
 class test_Playwright_Page(TestCase):
     headless        : bool
     api_playwright  : API_Playwright
-    #playwright_page : Playwright_Page
+    #page            : Playwright_Page
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.headless = True
         cls.api_playwright = API_Playwright(headless=cls.headless)
-        cls.page           = cls.api_playwright.new_page()
 
     @classmethod
     def tearDownClass(cls) -> None:
         assert cls.api_playwright.browser_close() is True
 
-
     def test_ctor(self):
-        assert type(self.page) == Playwright_Page
-
+        assert self.headless                is True
+        assert self.api_playwright.headless is True
 
     def test_open(self):
+        page = self.api_playwright.new_page()
         url = 'https://www.google.com/' + random_text()
-        assert type(self.page.open(url)) == Response
-        assert self.page.url() == url
+        assert type(page.open(url)) == Response
+        assert page.url() == url
+        assert page.close() is True
+
 
     def test_goto(self):
-        url      = 'https://www.google.com/'
+        page     = self.api_playwright.new_page()
+        url      = 'https://httpbin.org/get'
+        raw_page = page.page
 
-        raw_page = self.page.page
-        #assert str(raw_page)             == "<Page url='about:blank'>"
+        assert str(raw_page)             == "<Page url='about:blank'>"
+        assert page.url()                == 'about:blank'
 
-        response = self.page.goto(url)
+        response = page.goto(url)
+        assert page.close() is True
+
         request  = response.request
         assert type(response)            == Response
         assert response.ok               == True
         assert response.status           == 200
         assert response.status_text      == ''
         assert response.url              == url
-
-
         assert response.frame.page       == raw_page
-
-        assert str(response.frame.page)  == "<Page url='https://www.google.com/'>"
+        assert str(response.frame.page)  == f"<Page url='{url}'>"
         assert request.url               == url
         assert request.failure           is None
         assert request.frame.url         == url
@@ -58,4 +62,4 @@ class test_Playwright_Page(TestCase):
         assert request.post_data         is None
         assert request.redirected_from   is None
         assert request.resource_type     == 'document'
-        #assert list_set(request.headers)  == ['upgrade-insecure-requests', 'user-agent']
+        assert page.close() is True

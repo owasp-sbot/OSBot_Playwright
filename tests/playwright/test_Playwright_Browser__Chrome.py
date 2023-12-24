@@ -5,6 +5,7 @@ from osbot_utils.utils.Files import file_exists, folder_exists, current_temp_fol
 from osbot_utils.utils.Misc import list_set
 from playwright.sync_api import BrowserType, Browser, BrowserContext
 
+from osbot_playwright._extra_methdos_osbot import in_mac, in_linux
 from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
 from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.Playwright_Process import Playwright_Process
@@ -34,8 +35,10 @@ class test_Playwright_Browser__Chrome(TestCase):
     def test__process(self):
         process_details = self.playwright_browser_chrome.process()
         assert list_set(process_details) == ['created_at', 'debug_port', 'headless', 'process_args', 'process_id', 'reuse_browser', 'status', 'url']
-        pprint(process_details)
-        #assert process_details.get('status') == 'running'
+        if in_mac():
+            assert process_details.get('status') == 'running'
+        if in_linux():
+            assert process_details.get('status') == 'sleeping'          # in linux (at least in GH actions) the process is in a sleeping state (i.e. waiting for network connections)
 
     def test_browser(self):
         browser = self.playwright_browser_chrome.browser()
