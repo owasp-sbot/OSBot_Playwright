@@ -21,7 +21,13 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
 
     def test_dry_run(self):
         result = self.playwright_cli.dry_run()
-        pprint(result)
+        stdout = result.get('stdout')
+        assert result.get('runParams') == ['playwright', 'install', '--dry-run']
+        assert result.get('status'   ) == 'ok'
+        assert result.get('stderr'   ) == ''
+        assert 'browser: chromium '    in stdout
+        assert 'browser: firefox '     in stdout
+        assert 'browser: webkit '      in stdout
 
     def test_help(self):
         result = self.playwright_cli.help()
@@ -29,31 +35,11 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
 
     def test_executable_path__chrome(self):
         executable_path      = self.playwright_cli.executable_path__chrome()
-        parent_folder_path   = parent_folder(executable_path)
-        pprint(executable_path)
-        #pprint(parent_folder_path)
-        #pprint(files_find     (parent_folder_path))
-        #pprint(files_recursive(parent_folder_path))
         assert file_exists(executable_path)
 
     def test_executable_version__chrome(self):
         version = self.playwright_cli.executable_version__chrome()
-        pprint(version)
-        #assert version.startswith('Chromium')
-
-    def test_invoke_raw(self):
-        result = self.playwright_cli.invoke_raw('help')
-        pprint(result)
-
-    def test_install_details_raw(self):
-        browser_name = 'chromium'
-        with self.playwright_cli as _:
-            _.set_os_env_for_browsers_path()
-            params = ['install', browser_name, '--dry-run']
-            result = _.invoke_raw(params)#.get('stdout')
-            stdout = result.get('stdout')
-            pprint(result)
-            pprint(_.parse_stdout__dryrun(stdout))
+        assert version.startswith('Chromium')
 
     def test_install_details__chrome(self):
         install_details = self.playwright_cli.install_details__chrome()
@@ -61,11 +47,14 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
                                              'download_url', 'install_location']
         assert install_details.get('browser').startswith('chromium')
         assert parent_folder(install_details.get('install_location')) ==  self.playwright_cli.path_browsers()
-        pprint(install_details)
 
-    def test_installed_version(self):
-        result = self.playwright_cli.installed_version('chromium')
-        pprint(result)
+    def test_invoke_raw(self):
+        result = self.playwright_cli.invoke_raw('help')
+        assert list_set(result) == ['cwd', 'error', 'kwargs', 'runParams', 'status', 'stderr', 'stdout']
+        assert result.get('status'   ) == 'ok'
+        assert result.get('runParams') == ['playwright', 'help']
+        assert result.get('stderr'   ) == ''
+        assert result.get('stdout'   ).startswith('Usage: playwright [options] [command]')
 
     def test_version(self):
         assert self.playwright_cli.version() == VERSION_PLAYWRIGHT
