@@ -42,10 +42,10 @@ class Playwright_CLI:
         print(f'Current OS: {self.current_os()}')
         print(f'Install location: {install_location}')
         print('-' * 100)
-
+        return install_location
         if self.current_os() == 'macOS':
             return path_combine(install_location, 'chrome-mac/Chromium.app/Contents/MacOS/Chromium')
-        elif self.current_os() == 'linux':
+        elif self.current_os() == 'Linux':
             return path_combine(install_location,"chrome-linux/chromium" )  # todo, confirm this
 
     def executable_version__chrome(self):
