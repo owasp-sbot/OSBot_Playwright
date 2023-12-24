@@ -42,8 +42,18 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
         #assert version.startswith('Chromium')
 
     def test_invoke_raw(self):
-        result = self.playwright_cli.invoke_raw('')
+        result = self.playwright_cli.invoke_raw('help')
         pprint(result)
+
+    def test_install_details_raw(self):
+        browser_name = 'chromium'
+        with self.playwright_cli as _:
+            _.set_os_env_for_browsers_path()
+            params = ['install', browser_name, '--dry-run']
+            result = _.invoke_raw(params)#.get('stdout')
+            stdout = result.get('stdout')
+            pprint(result)
+            pprint(_.parse_stdout__dryrun(stdout))
 
     def test_install_details__chrome(self):
         install_details = self.playwright_cli.install_details__chrome()

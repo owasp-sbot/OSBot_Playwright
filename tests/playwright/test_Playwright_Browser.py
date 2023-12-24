@@ -45,7 +45,7 @@ class test_Playwright_Browser(TestCase):
             playwright = self.playwright_browser.playwright()
             assert type(playwright) is Playwright
 
-        obj_info(playwright)
+        obj_info(playwright, value_width=512)
 
         assert len(playwright.devices  ) > 100
         assert type(playwright.chromium) is BrowserType

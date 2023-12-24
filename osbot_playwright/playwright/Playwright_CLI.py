@@ -14,6 +14,9 @@ class Playwright_CLI:
     def __init__(self):
         pass
 
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc_val, exc_tb): pass
+
     def browser_installed(self, browser_name):
         browser_path = self.install_details(browser_name).get('install_location')
         return folder_exists(browser_path)
@@ -34,13 +37,19 @@ class Playwright_CLI:
 
     def executable_path__chrome(self):
         install_location = self.install_location('chromium')
+        print()
+        print('-' * 100)
+        print(f'Current OS: {self.current_os()}')
+        print(f'Install location: {install_location}')
+        print('-' * 100)
+
         if self.current_os() == 'macOS':
             return path_combine(install_location, 'chrome-mac/Chromium.app/Contents/MacOS/Chromium')
         elif self.current_os() == 'linux':
             return path_combine(install_location,"chrome-linux/chromium" )  # todo, confirm this
 
     def executable_version__chrome(self):
-        return exec_process(self.executable_path__chrome(), ['--version']).get('stdout').strip()
+        return exec_process(self.executable_path__chrome(), ['--version']) #.get('stdout').strip()
 
 
     def dry_run(self):
