@@ -57,9 +57,6 @@ class test_Playwright_Browser__Chrome(TestCase):
         assert self.playwright_browser_chrome.is_installed() is True
 
 
-
-
-
         # path = '/tmp/chromium_download'
         # from playwright.sync_api import sync_playwright
         # with sync_playwright() as p:

@@ -2,6 +2,7 @@ from unittest import TestCase
 
 from osbot_utils.testing.Trace_Call import trace_calls
 from osbot_utils.utils.Dev import pprint
+from osbot_utils.utils.Misc import wait_for
 from osbot_utils.utils.Python_Logger           import logger_info
 from playwright.sync_api import Browser, Page
 
@@ -46,6 +47,21 @@ class test_API_Playwright(TestCase):
         assert page.close    ()                 is True
 
 
+    # def test_video_recording(self):
+    #     browser = self.api_playwright.browser()
+    #     #page = self.api_playwright.page()
+    #     record_video_dir = '/tmp/videos'
+    #     context = browser.new_context(record_video_dir=record_video_dir)
+    #     pprint(context)
+    #     page = context.new_page()
+    #     page.goto('https://news.bbc.co.uk')
+    #
+    #     for i in range(0,10):
+    #         page.mouse.wheel(0, 100)
+    #         #page.keyboard.press('PageDown')
+    #         #wait_for(0.5)
+    #     page.close()
+    #     context.close()
 
     # @sync
     # async def test_page(self):

@@ -9,9 +9,6 @@ class Playwright_Browser:
     def __enter__(self): return self
     def __exit__(self, exc_type, exc_val, exc_tb): pass
 
-    # def browser_firefox(self):              # todo refactor into separate class
-    #     return self.playwright().firefox
-
     def event_loop(self):
         if self.__playwright:
             return self.__playwright._loop

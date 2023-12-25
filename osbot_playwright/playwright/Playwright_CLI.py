@@ -11,11 +11,13 @@ VERSION_PLAYWRIGHT              = "Version 1.40.0"
 
 class Playwright_CLI:
 
-    def __init__(self):
+    def __init__(self, use_evn_var_for_browsers_path=True):
+        self.use_evn_var_for_browsers_path = use_evn_var_for_browsers_path
         pass
 
     def __enter__(self): return self
     def __exit__(self, exc_type, exc_val, exc_tb): pass
+
 
     def browser_installed(self, browser_name):
         browser_path = self.install_details(browser_name).get('install_location')
@@ -98,7 +100,8 @@ class Playwright_CLI:
         return data
 
     def set_os_env_for_browsers_path(self):
-        os.environ['PLAYWRIGHT_BROWSERS_PATH'] = self.path_browsers()
+        if self.use_evn_var_for_browsers_path:
+            os.environ['PLAYWRIGHT_BROWSERS_PATH'] = self.path_browsers()
 
     def version(self):
         return self.invoke_raw('-V').get('stdout').strip()
