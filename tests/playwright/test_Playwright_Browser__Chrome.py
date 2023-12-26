@@ -1,8 +1,9 @@
 from pprint import pprint
 from unittest import TestCase
 
+from osbot_utils.testing.Duration import Duration
 from osbot_utils.utils.Files import file_exists, folder_exists, current_temp_folder
-from osbot_utils.utils.Misc import list_set
+from osbot_utils.utils.Misc import list_set, obj_info, obj_data
 from playwright.sync_api import BrowserType, Browser, BrowserContext
 
 from osbot_playwright._extra_methdos_osbot import in_mac, in_linux
@@ -28,6 +29,7 @@ class test_Playwright_Browser__Chrome(TestCase):
             assert isinstance(_, Playwright_Browser        )
             assert isinstance(_, object                    )
             assert _.headless     is True
+            assert isinstance(_.playwright_process, Playwright_Process)
 
     def test__install(self):
         assert self.playwright_browser_chrome.install() is True
@@ -42,16 +44,19 @@ class test_Playwright_Browser__Chrome(TestCase):
 
     def test_browser(self):
         browser = self.playwright_browser_chrome.browser()
-        assert type(browser            ) is Browser
-        assert type(browser.contexts[0]) is BrowserContext
+        assert type(browser            )     is Browser
+        assert type(browser.contexts[0])     is BrowserContext
+        assert list_set(obj_data(browser) )  == ['browser_type','contexts', 'version']
+        assert browser.browser_type.name     == 'chromium'
+        assert len(browser.contexts)         == 1
 
-    def test_chromium(self):
-        assert type(self.playwright_browser_chrome.chromium()) is BrowserType
-
-    def test_chromium_exe_path(self):
-        chromium_exe_path = self.playwright_browser_chrome.chromium_exe_path()
-        assert chromium_exe_path.startswith(current_temp_folder())
-        assert file_exists(self.playwright_browser_chrome.chromium_exe_path()) is True
+    # def test_chromium(self):
+    #     assert type(self.playwright_browser_chrome.chromium()) is BrowserType
+    #
+    # def test_chromium_exe_path(self):
+    #     chromium_exe_path = self.playwright_browser_chrome.chromium_exe_path()
+    #     assert chromium_exe_path.startswith(current_temp_folder())
+    #     assert file_exists(self.playwright_browser_chrome.chromium_exe_path()) is True
 
     def test_is_installed(self):
         assert self.playwright_browser_chrome.is_installed() is True

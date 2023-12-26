@@ -10,6 +10,7 @@ from osbot_utils.utils.Misc          import date_now
 from osbot_utils.utils.Process import stop_process
 from osbot_utils.utils.Python_Logger import Python_Logger
 
+# todo: refactor this class to remove all references to chromium (i.e. make it generic for all browsers)
 DEFAULT_VALUE_DEBUG_PORT   = 9910
 FORMAT_CHROME_DATA_FOLDER  = 'playwright_chrome_data_folder_in_port__{port}'
 TARGET_HOST                = 'localhost'
@@ -21,9 +22,9 @@ CHROMIUM_PARAM_HEADLESS    = "--headless"
 
 class Playwright_Process:
 
-    def __init__(self, browser_path=None, headless=True, reuse_browser=True, debug_port=DEFAULT_VALUE_DEBUG_PORT):
+    def __init__(self, browser_path=None, headless=True, reuse_browser=True, debug_port=None):
         self.logger        = Python_Logger().setup()
-        self.debug_port    = debug_port
+        self.debug_port    = debug_port or DEFAULT_VALUE_DEBUG_PORT
         self.browser_path  = browser_path
         self.headless      = headless
         self.reuse_browser = reuse_browser
@@ -55,7 +56,7 @@ class Playwright_Process:
         process_details                = self.process_details()
 
         if process_details == {}:
-            chromium_debug_port     = None
+            chromium_debug_port     = None                                          # todo refactor to remove chromium references and dependencies (i.e. run also firefox and webkit)
             chromium_process_id     = None
             chromium_process_exists = False
             chromium_process_status = None
@@ -130,12 +131,15 @@ class Playwright_Process:
             self.logger.error("There is already an chromium process running")
             return False
 
+        if self.debug_port is None:
+            raise Exception("[Playwright_Process] in start_process the debug_port value was not set")
+
         if self.browser_path is None:
-            return
+            raise Exception("[Playwright_Process] in start_process the browser_path value was not set")
 
         browser_data_folder = self.path_data_folder()
         params = [self.browser_path, f'{CHROMIUM_PARAM_DEBUG_PORT}={self.debug_port}'      ,
-                                   f'{CHROMIUM_PARAM_DATA_FOLDER}={browser_data_folder}' ]
+                                     f'{CHROMIUM_PARAM_DATA_FOLDER}={browser_data_folder}' ]
 
         if self.headless:
             params.append(CHROMIUM_PARAM_HEADLESS)
@@ -149,8 +153,6 @@ class Playwright_Process:
             raise Exception(f"in browser_start_process, port {self.debug_port} was not open after process start")
 
         self.logger.info(f"started process id {process.pid} with debug port {self.debug_port}")
-
-        #self.browser_connect_to_existing_process()
 
         return True
 

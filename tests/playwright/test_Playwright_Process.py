@@ -23,7 +23,7 @@ class test_Playwright_Process(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.debug_port   = random_port()
-        cls.browser_path = Playwright_Browser__Chrome().chromium_exe_path()
+        cls.browser_path = Playwright_Browser__Chrome().browser_exec_path
         cls.headless = True
         with Playwright_Process(browser_path=cls.browser_path, headless=cls.headless, debug_port=cls.debug_port) as _:
             _.delete_browser_data_folder()
@@ -44,6 +44,7 @@ class test_Playwright_Process(TestCase):
     #     self.playwright_process = Playwright_Process()
 
     def test__init__(self):
+        print('in Test__init__')
         with self.playwright_process as _:
             assert type(_.logger)    == Python_Logger
             assert _.browser_path    == self.browser_path

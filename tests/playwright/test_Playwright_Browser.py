@@ -8,6 +8,7 @@ from osbot_utils.utils.Misc import obj_info
 from playwright.sync_api import Playwright, BrowserType
 
 from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
+from osbot_playwright.playwright.Playwright_Install import SUPORTTED_BROWSERS
 
 
 class test_Playwright_Browser(TestCase):
@@ -18,8 +19,13 @@ class test_Playwright_Browser(TestCase):
     def tearDown(self):
         self.playwright_browser.stop()
 
-    def test__init__(self):
-        assert self.playwright_browser.headless is True
+    def test_browser_via_cdp(self):
+        assert self.playwright_browser.browser_via_cdp(browser_name=None, endpoint_url=None) is None
+
+    def test_browser_type(self):
+        for browser in SUPORTTED_BROWSERS:
+            assert type(self.playwright_browser.browser_type(browser)) is BrowserType
+        assert self.playwright_browser.browser_type('aaa') is None
 
     def test_event_loop(self):
         def create_and_stop():
@@ -41,9 +47,9 @@ class test_Playwright_Browser(TestCase):
 
     def test_playwright(self):
         #print()
-        with Duration(prefix='playwright'):
-            playwright = self.playwright_browser.playwright()
-            assert type(playwright) is Playwright
+
+        playwright = self.playwright_browser.playwright()
+        assert type(playwright) is Playwright
 
         #obj_info(playwright, value_width=512)
 

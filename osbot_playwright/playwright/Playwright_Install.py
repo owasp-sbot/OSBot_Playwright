@@ -15,6 +15,9 @@ class Playwright_Install:
         self.playwrtight_cli.set_os_env_for_browsers_path()
 
 
+    def browser_details(self, browser_name):
+        return self.browsers_details().get(browser_name)
+
     def browsers_details(self, reset_data=False):                       # Define a method that retrieves browser details, with an option to reset data.
         path_browsers_details = self.path_browsers_details()            # Get the path where browser details are stored.
         browsers_details = json_load_file(path_browsers_details)        # Load browser details from a JSON file at the specified path.
@@ -34,7 +37,7 @@ class Playwright_Install:
             install_details = self.playwrtight_cli.install_details(browser_name)
             installed       = folder_exists(install_details.get('install_location'))
             browser_details = { 'download_url'     : install_details.get('download_url'    ) ,
-                                'executable_paths' : executable_paths.get(browser_name     ) ,
+                                'executable_path'  : executable_paths.get(browser_name     ) ,
                                 'install_location' : install_details.get('install_location') ,
                                 'installed'        : installed                               ,
                                 'version'          : install_details.get('browser'         ) }

@@ -14,7 +14,7 @@ class test_Playwright_Install(TestCase):
         assert list_set(browsers_details) == SUPORTTED_BROWSERS
         for browser_name in SUPORTTED_BROWSERS:
             browser_details = browsers_details.get(browser_name)
-            assert list_set(browser_details) == ['download_url', 'executable_paths', 'install_location', 'installed', 'version']
+            assert list_set(browser_details) == ['download_url', 'executable_path', 'install_location', 'installed', 'version']
             if browser_details.get('installed'):
                 assert folder_exists(browser_details.get('install_location')) is True
 
