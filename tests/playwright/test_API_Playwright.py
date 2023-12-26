@@ -7,22 +7,26 @@ from osbot_utils.utils.Python_Logger           import logger_info
 from playwright.sync_api import Browser, Page
 
 from osbot_playwright.playwright.API_Playwight import API_Playwright
+from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
 class test_API_Playwright(TestCase):
-    headless       : bool
-    api_playwright : API_Playwright
+    headless                  : bool
+    api_playwright            : API_Playwright
+    playwright_browser_chrome : Playwright_Browser__Chrome
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.headless = True
-        cls.log_info = logger_info()
-        cls.api_playwright = API_Playwright(headless=cls.headless)
+        cls.playwright_browser_chrome = Playwright_Browser__Chrome(headless=cls.headless)
+        cls.api_playwright            = cls.playwright_browser_chrome.api_playwright()
+        #cls.log_info = logger_info()
+
 
     @classmethod
     def tearDownClass(cls) -> None:
-        assert cls.api_playwright.browser_close() is True
+        assert cls.playwright_browser_chrome.stop_playwright_and_process() is True
 
     def test_browser(self):
         assert type(self.api_playwright.browser()) is Browser

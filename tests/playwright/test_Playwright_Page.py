@@ -6,22 +6,25 @@ from osbot_utils.utils.Misc import random_text, obj_info
 from playwright.sync_api import Response
 
 from osbot_playwright.playwright.API_Playwight import API_Playwright
+from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
 
 class test_Playwright_Page(TestCase):
-    headless        : bool
-    api_playwright  : API_Playwright
+    headless                 : bool
+    api_playwright           : API_Playwright
+    playwright_browser_chrome: Playwright_Browser__Chrome
     #page            : Playwright_Page
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.headless = True
-        cls.api_playwright = API_Playwright(headless=cls.headless)
+        cls.playwright_browser_chrome = Playwright_Browser__Chrome(headless=cls.headless)
+        cls.api_playwright            = cls.playwright_browser_chrome.api_playwright()
 
     @classmethod
     def tearDownClass(cls) -> None:
-        assert cls.api_playwright.browser_close() is True
+        assert cls.playwright_browser_chrome.stop_playwright_and_process() is True
 
     def test_ctor(self):
         assert self.headless                is True

@@ -1,8 +1,4 @@
-from osbot_utils.decorators.methods.cache_on_self import cache_on_self
 from playwright.sync_api import Browser
-
-from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.Playwright_Chrome_Browser import Playwright_Chrome_Browser
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
 
@@ -10,7 +6,6 @@ class API_Playwright:
 
     def __init__(self, headless=True):
         self.headless                  = headless
-        self.playwright_browser_chrome =  Playwright_Browser__Chrome()
 
     #@cache_on_self
     # def browser(self) -> Playwright_Chrome_Browser:
@@ -19,9 +14,12 @@ class API_Playwright:
     #         self.playwright_browser_chrome.setup()
     #     return self.playwright_browser_chrome
 
-    @cache_on_self
-    def browser(self) -> Browser :
-        return self.playwright_browser_chrome.browser()
+    # @cache_on_self
+    # def browser(self) -> Browser :
+    #     return self.playwright_browser_chrome.browser()
+
+    def browser(self) -> Browser:
+        raise Exception('browser() not implemented')
 
     def browser_close(self):
         return self.playwright_browser_chrome.stop_playwright_and_process()
