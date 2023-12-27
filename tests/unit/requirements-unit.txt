@@ -10,3 +10,7 @@ psutil
 pytest
 coverage
 beautifulsoup4
+
+
+# for browserless  (refactor to separate requirements file)
+requests

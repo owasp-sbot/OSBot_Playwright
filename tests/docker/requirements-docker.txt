@@ -6,8 +6,5 @@ git+https://github.com/owasp-sbot/OSBot-Docker.git@dev
 boto3
 docker
 
-# for browserless
-requests
-
 # for fastapi
 fastapi

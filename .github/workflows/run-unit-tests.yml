@@ -6,9 +6,11 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
+      # Setup
       - name: Checkout Code from GitHub
         uses: actions/checkout@v3
 
+      # Tests - Unit
       - name: Install Dependencies (for tests - Unit)
         uses: ./.github/actions/install-dependencies__unit
 
@@ -17,11 +19,16 @@ jobs:
         with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}
 
+      # Tests - Integration
       - name: Run Tests - Integration
         uses: ./.github/actions/run-tests__integration
         with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}
           BROWSERLESS__API_KEY  : ${{ secrets.BROWSERLESS__API_KEY  }}
+
+      # Tests - Docker
+      - name: Install Dependencies (for tests - Docker)
+        uses: ./.github/actions/install-dependencies__docker
 
       - name: Run Tests - Docker
         uses: ./.github/actions/run-tests__docker
@@ -32,6 +39,7 @@ jobs:
           AWS_ACCOUNT_ID        : ${{ secrets.AWS_ACCOUNT_ID        }}
           AWS_ACCESS_KEY_ID     : ${{ secrets.AWS_ACCESS_KEY_ID     }}
 
+      # Tear Down
       - name: Publish Code Coverage
         uses: ./.github/actions/publish-coverage
         with:
