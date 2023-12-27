@@ -16,6 +16,7 @@ class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
 
     def __init__(self, port=None, headless=True):
         super().__init__()
+        self._browser           = None
         self.debug_port         = port or random_port()
         self.headless           = headless
         self.browser_name       = CHROME_BROWSER_NAME
@@ -26,7 +27,10 @@ class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
         self.playwright_cli     = Playwright_CLI()
         self.playwright_cli.set_os_env_for_browsers_path()
 
-    def api_playwright(self) -> API_Playwright:
+    def api_playwright(self) -> API_Playwright:                 # to help with code complete
+        return self
+
+    def playwright_browser(self) -> Playwright_Browser:         # to help with code complete
         return self
 
     # def chromium(self):
@@ -35,12 +39,14 @@ class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
     # def chromium_exe_path(self):
     #     return self.chromium().executable_path
 
-    @cache_on_self
+
     def browser(self):
-        if self.browser_process__start_if_needed() is False:
-            raise Exception('Browser process not started/found')
-        endpoint_url = self.endpoint_url()
-        return self.browser_via_cdp(browser_name=self.browser_name, endpoint_url=endpoint_url)
+        if self._browser is None:
+            if self.browser_process__start_if_needed() is False:
+                raise Exception('Browser process not started/found')
+            endpoint_url = self.endpoint_url()
+            self._browser = self.browser_via_cdp(browser_name=self.browser_name, endpoint_url=endpoint_url)
+        return self._browser
 
     def browser_process__start_if_needed(self):
         return self.process() != {}
@@ -65,3 +71,7 @@ class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
         result = (self              .event_loop_closed() is True and
                   self.playwright_process.process_running  () is False)
         return result
+
+    def restart(self):
+        self._browser = None
+        return self.playwright_process.restart_process()

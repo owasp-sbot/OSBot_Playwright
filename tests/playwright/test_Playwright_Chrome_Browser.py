@@ -70,20 +70,7 @@ class test_Playwright_Chrome_Browser(TestCase):
         chromium_exe_path = self.playwright_chrome_browser.chromium_exe_path()
         assert file_exists(chromium_exe_path)
 
-    def test_close_all_context_and_pages(self):
-        with self.playwright_chrome_browser as _:
-            # simulate when close_context raises an exception
-            with patch.object(_, 'close_context', side_effect=Error("Test exception")):
-                _.close_all_context_and_pages()
-
-            page = _.new_page().page
-            assert type(page) == Page
-            assert len(_.pages()) == 1
-            _.close_all_context_and_pages()
-            assert len(_.pages()) == 0
-            assert len(_.contexts()) == 0
-
-            _.restart_process()                         # we need to do this since deleting the last context seems to prevent new ones from being created
+                      # we need to do this since deleting the last context seems to prevent new ones from being created
 
     def test_contexts(self):
         with self.playwright_chrome_browser as _:

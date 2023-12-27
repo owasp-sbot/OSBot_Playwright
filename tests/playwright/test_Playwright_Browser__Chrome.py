@@ -1,6 +1,7 @@
 from pprint import pprint
 from unittest import TestCase
 
+import pytest
 from osbot_utils.testing.Duration import Duration
 from osbot_utils.utils.Files import file_exists, folder_exists, current_temp_folder
 from osbot_utils.utils.Misc import list_set, obj_info, obj_data
@@ -86,5 +87,33 @@ class test_Playwright_Browser__Chrome(TestCase):
         # print(page.content())
 
 
+@pytest.mark.skip('only for local debugging')
+class test_Playwright_Browser__Chrome__Not_Headless(TestCase):
 
+    def setUp(self):
+        self.headless   = False
+        self.debug_port = 22222
+        self.playwright_browser__chrome = Playwright_Browser__Chrome(port=self.debug_port, headless=self.headless)
+        self.process_details            = self.playwright_browser__chrome.process()
+
+    def test__init__(self):
+        with self.playwright_browser__chrome as _:
+            assert _.headless     is False
+            assert _.debug_port   == self.debug_port
+            #assert _.reuse_browser is True
+            assert self.process_details.get('debug_port') == self.debug_port
+            assert self.process_details.get('headless'  ) == self.headless
+
+    def test_browser(self):
+        with self.playwright_browser__chrome as _:
+            assert type(_.browser()) == Browser
+            page = _.page()
+            page.open('https://news.bbc.co.uk')
+            #pprint(len(page.page.query_selector_all('a')))
+            #page = _.browser().new_page()               # open a new page and check that all is good
+            #assert page.url == 'about:blank'
+            #url = _.url_browser_debug_page_json()
+            #page.goto(url)
+            #assert page.url == url
+            #page.close()
 

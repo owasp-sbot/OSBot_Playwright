@@ -31,24 +31,7 @@ class test_API_Playwright(TestCase):
     def test_browser(self):
         assert type(self.api_playwright.browser()) is Browser
 
-    def test_new_page(self):
-        page = self.api_playwright.new_page()
-        assert type(page) is Playwright_Page
-        assert page.url()    == 'about:blank'
-        assert page.is_closed() is False
-        assert page.close    () is True
 
-    def test_page(self):
-        target_url     = 'https://www.google.com/404'
-        expected_title = 'Error 404 (Not Found)!!1'
-        page = self.api_playwright.page()
-        assert type(page)                       is Playwright_Page
-        assert page.url      ()                 == 'about:blank'
-        assert page.open     (target_url).url   == target_url
-        assert page.url      ()                 == target_url
-        assert page.html     ().title()         == expected_title
-        assert page.is_closed()                 is False
-        assert page.close    ()                 is True
 
 
     # def test_video_recording(self):

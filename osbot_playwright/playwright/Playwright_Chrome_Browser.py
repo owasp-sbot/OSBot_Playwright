@@ -44,81 +44,26 @@ class Playwright_Chrome_Browser:
         return self._browser
 
     # this is a weird one, since code coverage was breaking with the chromium.connect_over_cdp call
-    def browser_connect_over_cdp(self):
-        browser_url = self.url_browser_debug_page()
-        chromium = self.chromium()
-        return chromium.connect_over_cdp(endpoint_url=browser_url)
-
-    def browser_connect_to_existing_process(self):
-        if self.process_running() is False:
-            self.logger.error("No existing process found to connect to")
-            return False
-        self.logger.info("Connecting to existing Chromium process")
-        try:
-            self._browser = self.browser_connect_over_cdp()
-            if self._browser:
-                self.logger.info(f"Connected ok to Chromium version : { self._browser.version }")
-                return True
-        except Exception as error:
-            self.logger.error(f"[Playwright_Chrome] in browser_connect: {error}")
-        return False
-
-    def close_all_context_and_pages(self):
-        contexts_closed  = 0
-        pages_closed = 0
-        contexts = self.contexts() or []
-        for context in contexts:
-            for page in context.pages:
-                self.logger.info(f"Closing page: {page}")
-                self.close_page(page)
-                #page.close()
-                pages_closed += 1
-            try:
-                self.close_context(context)
-            except Error:      # for the cases where the context has already been closed
-                continue
-            contexts_closed += 1
-        self.logger.info(f"Closed {pages_closed} pages and {contexts_closed} contexts")
-
-    def close_context(self, context):
-        context.close()
-
-    def close_page(self, page):
-        page.close()
+    # def browser_connect_over_cdp(self):
+    #     browser_url = self.url_browser_debug_page()
+    #     chromium = self.chromium()
+    #     return chromium.connect_over_cdp(endpoint_url=browser_url)
+    #
+    # def browser_connect_to_existing_process(self):
+    #     if self.process_running() is False:
+    #         self.logger.error("No existing process found to connect to")
+    #         return False
+    #     self.logger.info("Connecting to existing Chromium process")
+    #     try:
+    #         self._browser = self.browser_connect_over_cdp()
+    #         if self._browser:
+    #             self.logger.info(f"Connected ok to Chromium version : { self._browser.version }")
+    #             return True
+    #     except Exception as error:
+    #         self.logger.error(f"[Playwright_Chrome] in browser_connect: {error}")
+    #     return False
 
 
-
-    def contexts(self):
-        if self.browser():
-            return self.browser().contexts
-        return []
-
-
-    def context(self, index=0):
-        contexts = self.contexts()
-        if contexts and len(contexts) > index:
-            return contexts[index]
-
-
-
-    def new_page(self, context_index=0):
-        context = self.context(index=context_index)
-        if context:
-            page = context.new_page()
-            return Playwright_Page(context=context, page=page)
-
-    def pages(self, context_index=0):
-        pages = []
-        context = self.context(index=context_index)
-        if context:
-            for page in context.pages:
-                pages.append(Playwright_Page(context=context, page=page))
-        return pages
-
-    def page(self, context_index=0, page_index=0):
-        pages = self.pages(context_index=context_index)
-        if pages and len(pages) > page_index:
-            return pages[page_index]
 
 
     #def safe_state(self):
@@ -151,7 +96,5 @@ class Playwright_Chrome_Browser:
 
 
 
-    def restart_process(self):
-        self.stop_process()
-        self.setup()
+
 

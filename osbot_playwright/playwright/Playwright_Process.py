@@ -6,7 +6,7 @@ from osbot_utils.utils.Files import path_combine, temp_folder_current, folder_cr
     file_delete, folder_delete_recursively
 from osbot_utils.utils.Http import wait_for_port, port_is_open, wait_for_port_closed, GET, GET_json
 from osbot_utils.utils.Json          import json_save_file, json_load_file
-from osbot_utils.utils.Misc          import date_now
+from osbot_utils.utils.Misc import date_now, date_time_now
 from osbot_utils.utils.Process import stop_process
 from osbot_utils.utils.Python_Logger import Python_Logger
 
@@ -48,6 +48,14 @@ class Playwright_Process:
         folder_delete_recursively(browser_data_folder)
         return folder_exists(browser_data_folder)
 
+
+    def GET(self, path=''):
+        url = urljoin(self.url_browser_debug_page(), path)
+        return GET(url)
+
+    def GET_json(self, path=''):
+        url = urljoin(self.url_browser_debug_page(), path)
+        return GET_json(url)
 
     def healthcheck(self):
         config                         = self.config()
@@ -173,7 +181,7 @@ class Playwright_Process:
 
     def save_process_details(self, process, debug_port):
         data = {
-                 'created_at'   : date_now()        ,
+                 'created_at'   : date_time_now()        ,
                  'debug_port'   : debug_port        ,
                  'headless'     : self.headless     ,
                  'process_args' : process.args      ,
@@ -183,13 +191,9 @@ class Playwright_Process:
         json_save_file(data, self.path_file_playwright_process())
         return self
 
-    def GET(self, path=''):
-        url = urljoin(self.url_browser_debug_page(), path)
-        return GET(url)
-
-    def GET_json(self, path=''):
-        url = urljoin(self.url_browser_debug_page(), path)
-        return GET_json(url)
+    def restart_process(self):
+        self.stop_process()
+        return self.start_process()
 
     def url_browser_debug_page(self, path=""):
         return f"http://{TARGET_HOST}:{self.debug_port}/{path}"
