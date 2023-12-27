@@ -1,0 +1,11 @@
+git+https://github.com/owasp-sbot/OSBot-Utils.git@dev
+git+https://github.com/owasp-sbot/OSBot-AWS.git@dev
+git+https://github.com/owasp-sbot/OSBot-Playwright.git@dev
+load_dotenv
+
+boto3
+pyyaml
+fastapi
+uvicorn
+playwright
+

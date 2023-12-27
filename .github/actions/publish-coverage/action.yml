@@ -1,25 +1,26 @@
-name: Run Python Tests
-description: 'Run Python Tests'
+name: Publish Code Coverage
+description: 'Publish Code Coverage'
 
 inputs:
   codecov_token:
     description: 'CodeCov access token'
     required: true
-  package_name:
-    description: 'Package name for coverage'
-    required: true
+
 
 runs:
     using: 'composite'
     steps:
-      - name: Run tests with pytest (with coverage)
+      - name: Combine coverage data
         shell: bash
         run: |
-          coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests
+            ls -la
+            coverage combine .coverage.unit .coverage.docker .coverage.integration
+
       - name: Print coverage report
         shell: bash
         run: |
           coverage report -m
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
