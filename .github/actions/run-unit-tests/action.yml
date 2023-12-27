@@ -28,20 +28,35 @@ inputs:
 runs:
     using: 'composite'
     steps:
-      - name: Run tests with pytest (with coverage)
+      - name: Run pytest (with coverage) - Unit Tests
         shell: bash
         run: |
-          coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests
+          coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests/unit
         env:
-          BROWSERLESS__API_KEY : ${{ inputs.BROWSERLESS__API_KEY  }}
+          COVERAGE_FILE: .coverage.unit
+      - name: Run pytest (with coverage) - Docker
+        shell: bash
+        run: |
+          coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests/docker
+        env:
+          COVERAGE_FILE        : .coverage.docker
           AWS_SECRET_ACCESS_KEY: ${{ inputs.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION   : ${{ inputs.AWS_DEFAULT_REGION    }}
           AWS_ACCOUNT_ID       : ${{ inputs.AWS_ACCOUNT_ID        }}
           AWS_ACCESS_KEY_ID    : ${{ inputs.AWS_ACCESS_KEY_ID     }}
+          BROWSERLESS__API_KEY : ${{ inputs.BROWSERLESS__API_KEY  }}
+
+      - name: Combine coverage data
+        shell: bash
+        run: |
+            la -la
+            coverage combine .coverage.unit .coverage.docker
+          
       - name: Print coverage report
         shell: bash
         run: |
           coverage report -m
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
