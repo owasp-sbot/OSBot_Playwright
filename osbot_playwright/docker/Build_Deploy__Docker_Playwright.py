@@ -13,15 +13,11 @@ from osbot_playwright.docker.images.osbot_playwright.handler import run
 
 class Build_Deploy__Docker_Playwright:
 
-    def __init__(self, architecture='linux/amd64'):
+    def __init__(self):
         self.image_name       = 'osbot_playwright'
         self.path_images      = path_combine(osbot_playwright.path, 'docker/images')
         self.create_image_ecr =  Create_Image_ECR(image_name=self.image_name, path_images=self.path_images)
         self.deploy_lambda    =  Deploy_Lambda(run)
-
-        # set the default platform to linux/amd64 (instead of arm64 which is what happens in OSX)
-        if architecture:
-            os.environ['DOCKER_DEFAULT_PLATFORM'] =  architecture # 'linux/arm64'
 
     def api_docker(self):
         return self.create_image_ecr.api_docker
