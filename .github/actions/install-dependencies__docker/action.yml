@@ -14,4 +14,4 @@ runs:
       - name: Install dependencies (for tests - Unit)
         shell: bash
         run: |          
-          pip install -r tests/unit/requirements-docker.txt
+          pip install -r tests/docker/requirements-docker.txt
