@@ -10,8 +10,14 @@ jobs:
       - name: Install Dependencies
         uses: ./.github/actions/install-dependencies
 
-      - name: Run Unit Tests
+      - name: Run Tests - Unit
         uses: ./.github/actions/run-unit-tests
+        with:
+          codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
+          package_name          : ${{ secrets.PACKAGE_NAME          }}
+
+      - name: Run Tests - Docker
+        uses: ./.github/actions/run-tests__docker
         with:
           codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
           package_name          : ${{ secrets.PACKAGE_NAME          }}
@@ -20,4 +26,5 @@ jobs:
           AWS_DEFAULT_REGION    : ${{ secrets.AWS_DEFAULT_REGION    }}
           AWS_ACCOUNT_ID        : ${{ secrets.AWS_ACCOUNT_ID        }}
           AWS_ACCESS_KEY_ID     : ${{ secrets.AWS_ACCESS_KEY_ID     }}
+
 
