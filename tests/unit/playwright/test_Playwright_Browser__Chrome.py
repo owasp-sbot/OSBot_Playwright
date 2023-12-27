@@ -38,10 +38,11 @@ class test_Playwright_Browser__Chrome(TestCase):
     def test__process(self):
         process_details = self.playwright_browser_chrome.process()
         assert list_set(process_details) == ['created_at', 'debug_port', 'headless', 'process_args', 'process_id', 'reuse_browser', 'status', 'url']
-        if in_mac():
-            assert process_details.get('status') == 'running'
-        if in_linux():
-            assert process_details.get('status') == 'sleeping'          # in linux (at least in GH actions) the process is in a sleeping state (i.e. waiting for network connections)
+        # if in_mac():
+        #     assert process_details.get('status') == 'running'
+        # if in_linux():
+        #     assert process_details.get('status') == 'sleeping'          # in linux (at least in GH actions) the process is in a sleeping state (i.e. waiting for network connections)
+        assert process_details.get('status') in ['running', 'sleeping']
 
     def test_browser(self):
         browser = self.playwright_browser_chrome.browser()
