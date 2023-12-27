@@ -6,14 +6,21 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        uses: ./.github/actions/install-dependencies
+      #- uses: actions/checkout@v3
+      - name: Checkout Code from GitHub
+        uses: ./.github/actions/checkout-code
+
+      - name: Install Dependencies (Unit)
+        uses: ./.github/actions/install-dependencies__unit
 
       - name: Run Tests - Unit
-        uses: ./.github/actions/run-unit-tests
+        uses: ./.github/actions/run-tests__unit
         with:
-          codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
+          package_name          : ${{ secrets.PACKAGE_NAME          }}
+
+      - name: Run Tests - Integration
+        uses: ./.github/actions/run-tests__integration
+        with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}
 
       - name: Run Tests - Docker
@@ -26,5 +33,11 @@ jobs:
           AWS_DEFAULT_REGION    : ${{ secrets.AWS_DEFAULT_REGION    }}
           AWS_ACCOUNT_ID        : ${{ secrets.AWS_ACCOUNT_ID        }}
           AWS_ACCESS_KEY_ID     : ${{ secrets.AWS_ACCESS_KEY_ID     }}
+
+      - name: Publish Code Coverage
+        uses: ./.github/actions/publish-coverage
+        with:
+          codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
+
 
 
