@@ -8,6 +8,10 @@ inputs:
   package_name:
     description: 'Package name for coverage'
     required: true
+  BROWSERLESS__API_KEY:
+    description: 'BROWSERLESS__API_KEY'
+    required: true
+
 
 runs:
     using: 'composite'
@@ -16,6 +20,8 @@ runs:
         shell: bash
         run: |
           coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests
+        env:
+          BROWSERLESS__API_KEY: ${{ inputs.BROWSERLESS__API_KEY         }}
       - name: Print coverage report
         shell: bash
         run: |

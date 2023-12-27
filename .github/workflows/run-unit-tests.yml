@@ -15,4 +15,5 @@ jobs:
         with:
           codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
           package_name          : ${{ secrets.PACKAGE_NAME          }}
+          BROWSERLESS__API_KEY  : ${{ secrets.BROWSERLESS__API_KEY  }}
 
