@@ -48,10 +48,11 @@ class test_Build_Deploy__Docker_Playwright(TestCase):
     def test_build_docker_image(self):
         result = self.build_deploy.build_docker_image()
         image  = result.get('image')
-        pprint(result)
+        #pprint(result)
         assert result.get('status' ) == 'ok'
         assert result.get('tags')[0] == f'{self.aws_account_id}.dkr.ecr.eu-west-2.amazonaws.com/{self.build_deploy.image_name}:latest'
-        #assert image.get('Architecture') == self.build_deploy.image_architecture()
+        assert image.get('Architecture') == self.build_deploy.image_architecture()
+        assert image.get('Os') == 'linux'
 
     def test_create_container(self):
         container    = self.build_deploy.create_container()

@@ -21,8 +21,8 @@ class Local__Docker_Playwright:
         self.volume_path      = path_combine(self.path_images, 'docker_playwright')
         self.local_port       = 8888
         self.port_bindings    = {8000: self.local_port }
-        self.volumes          = { self.volume_path: { 'bind': '/var/task',
-                                                      'mode': 'ro'       }}
+        # self.volumes          = { self.volume_path: { 'bind': '/var/task',
+        #                                               'mode': 'ro'       }}
         self.container        = None
 
     def create_or_reuse_container(self):
@@ -31,11 +31,10 @@ class Local__Docker_Playwright:
             return next(iter(containers.values()))
 
         kwargs = { 'labels'        : self.labels        ,               # if not create one with the correct label
-                   'volumes'       : self.volumes       ,
+                   #'volumes'       : self.volumes       ,
                    'port_bindings' : self.port_bindings }
-        container = self.docker_image.create_container(**kwargs)
-        container.start()                                               # start container
-        return container
+        self.container = self.docker_image.create_container(**kwargs)
+        return  self.container.start()
 
     def containers_with_label(self):
         by_labels  = self.api_docker.containers_all__by_labels()
@@ -63,18 +62,21 @@ class Local__Docker_Playwright:
         local_url = f'http://localhost:{self.local_port}{path}'
         return local_url
 
-    def setup(self):
-        self.container = self.create_or_reuse_container()                         # make sure we have at least one running
-        self.wait_for_server_running()
-
-    def server_running(self):
+    def uvicorn_server_running(self):
         return 'Uvicorn running on ' in self.container.logs()
 
-    def wait_for_server_running(self, max_count=40, delay=0.5):
+    def wait_for_uvicorn_server_running(self, max_count=40, delay=0.5):
+        if self.container is None:
+            print(f'[wait_for_uvicorn_server_running] Error: no container running)')
+            return False
         for i in range(max_count):
-            if self.server_running():
+            status = self.container.status()
+            if status!= 'running':
+                print(f'[wait_for_uvicorn_server_running] Error: container is not runnnng, it is with the state: {status}')
+                return False
+            if self.uvicorn_server_running():
                 return True
-            print(f'waiting for server to start (attempt {i})')
+            #print(f'[wait_for_uvicorn_server_running] waiting for uvicorn_server to start (attempt {i})')
             wait_for(delay)
         return False
 
