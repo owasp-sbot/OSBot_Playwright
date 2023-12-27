@@ -9,7 +9,7 @@ jobs:
       - name: Checkout Code from GitHub
         uses: actions/checkout@v3
 
-      - name: Install Dependencies (Unit)
+      - name: Install Dependencies (for tests - Unit)
         uses: ./.github/actions/install-dependencies__unit
 
       - name: Run Tests - Unit
@@ -21,13 +21,12 @@ jobs:
         uses: ./.github/actions/run-tests__integration
         with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}
+          BROWSERLESS__API_KEY  : ${{ secrets.BROWSERLESS__API_KEY  }}
 
       - name: Run Tests - Docker
         uses: ./.github/actions/run-tests__docker
         with:
-          codecov_token         : ${{ secrets.CODECOV_TOKEN         }}
           package_name          : ${{ secrets.PACKAGE_NAME          }}
-          BROWSERLESS__API_KEY  : ${{ secrets.BROWSERLESS__API_KEY  }}
           AWS_SECRET_ACCESS_KEY : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION    : ${{ secrets.AWS_DEFAULT_REGION    }}
           AWS_ACCOUNT_ID        : ${{ secrets.AWS_ACCOUNT_ID        }}
