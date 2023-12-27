@@ -11,19 +11,6 @@ inputs:
   BROWSERLESS__API_KEY:
     description: 'BROWSERLESS__API_KEY'
     required: true
-  AWS_ACCESS_KEY_ID:
-    description: 'AWS Account KEY ID'
-    required: true
-  AWS_SECRET_ACCESS_KEY:
-    description: 'AWS Secret Access Key'
-    required: true
-  AWS_DEFAULT_REGION:
-    description: 'AWS Default region'
-    required: true
-  AWS_ACCOUNT_ID:
-    description: 'AWS Account ID'
-    required: true
-
 
 runs:
     using: 'composite'
@@ -33,7 +20,8 @@ runs:
         run: |
           coverage run --source=${{ inputs.package_name }} -m pytest -v -s --durations=0 --ignore=tests_* tests/integration
         env:
-          COVERAGE_FILE: .coverage.integration
+          COVERAGE_FILE        : .coverage.integration
+          BROWSERLESS__API_KEY : ${{ inputs.BROWSERLESS__API_KEY  }}
 
 
 #      - name: Run pytest (with coverage) - Docker
