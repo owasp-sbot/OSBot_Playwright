@@ -1,0 +1,12 @@
+# for OWSBot
+git+https://github.com/owasp-sbot/OSBot-Utils.git@dev
+python-dotenv
+
+# for playwright
+playwright
+psutil
+
+# for testing
+pytest
+coverage
+beautifulsoup4

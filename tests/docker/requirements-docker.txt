@@ -1,0 +1,13 @@
+# all requirements from requirements-unit.txt plus these ones
+
+# for OWSBot
+git+https://github.com/owasp-sbot/OSBot-AWS.git@dev
+git+https://github.com/owasp-sbot/OSBot-Docker.git@dev
+boto3
+docker
+
+# for browserless
+requests
+
+# for fastapi
+fastapi
