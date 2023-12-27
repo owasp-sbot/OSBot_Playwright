@@ -1,9 +1,4 @@
-from osbot_utils.decorators.methods.cache_on_self import cache_on_self
-from osbot_utils.utils.Dev import pprint
-from osbot_utils.utils.Http import GET_json
 from osbot_utils.utils.Misc import random_port
-
-from osbot_playwright.playwright.API_Playwight import API_Playwright
 from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
 from osbot_playwright.playwright.Playwright_CLI     import Playwright_CLI
 from osbot_playwright.playwright.Playwright_Install import Playwright_Install
@@ -12,7 +7,7 @@ from osbot_playwright.playwright.Playwright_Process import Playwright_Process
 CHROME_BROWSER_NAME   = 'chromium'
 DEFAULT_HOST_ENDPOINT = 'http://localhost'
 
-class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
+class Playwright_Browser__Chrome(Playwright_Browser):
 
     def __init__(self, port=None, headless=True):
         super().__init__()
@@ -27,18 +22,8 @@ class Playwright_Browser__Chrome(Playwright_Browser, API_Playwright):
         self.playwright_cli     = Playwright_CLI()
         self.playwright_cli.set_os_env_for_browsers_path()
 
-    def api_playwright(self) -> API_Playwright:                 # to help with code complete
-        return self
-
     def playwright_browser(self) -> Playwright_Browser:         # to help with code complete
         return self
-
-    # def chromium(self):
-    #     return self.playwright().chromium
-
-    # def chromium_exe_path(self):
-    #     return self.chromium().executable_path
-
 
     def browser(self):
         if self._browser is None:

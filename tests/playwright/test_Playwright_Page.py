@@ -4,15 +4,12 @@ import pytest
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Misc import random_text, obj_info
 from playwright.sync_api import Response
-
-from osbot_playwright.playwright.API_Playwight import API_Playwright
 from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 
 
 class test_Playwright_Page(TestCase):
     headless                 : bool
-    api_playwright           : API_Playwright
     playwright_browser_chrome: Playwright_Browser__Chrome
     #page            : Playwright_Page
 
@@ -20,18 +17,17 @@ class test_Playwright_Page(TestCase):
     def setUpClass(cls) -> None:
         cls.headless = True
         cls.playwright_browser_chrome = Playwright_Browser__Chrome(headless=cls.headless)
-        cls.api_playwright            = cls.playwright_browser_chrome.api_playwright()
 
     @classmethod
     def tearDownClass(cls) -> None:
         assert cls.playwright_browser_chrome.stop_playwright_and_process() is True
 
     def test_ctor(self):
-        assert self.headless                is True
-        assert self.api_playwright.headless is True
+        assert self.headless                           is True
+        assert self.playwright_browser_chrome.headless is True
 
     def test_open(self):
-        page = self.api_playwright.new_page()
+        page = self.playwright_browser_chrome.new_page()
         url = 'https://www.google.com/' + random_text()
         assert type(page.open(url)) == Response
         assert page.url() == url
@@ -39,7 +35,7 @@ class test_Playwright_Page(TestCase):
 
 
     def test_goto(self):
-        page     = self.api_playwright.new_page()
+        page     = self.playwright_browser_chrome.new_page()
         url      = 'https://httpbin.org/get'
         raw_page = page.page
 
