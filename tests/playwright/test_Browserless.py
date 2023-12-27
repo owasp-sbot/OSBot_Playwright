@@ -12,7 +12,7 @@ from osbot_utils.utils.Misc import wait_for
 from osbot_utils.utils.Str import str_safe
 
 
-@pytest.mark.skip('change so that only use Browserless in QA tests')
+#@pytest.mark.skip('change so that only use Browserless in QA tests')
 class test_API_Browserless(TestCase):
     api_browserless : API_Browserless()
     browser         : Browser
@@ -26,7 +26,7 @@ class test_API_Browserless(TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls.api_browserless.close()
+        cls.api_browserless.stop()
 
     def test_api_key(self):
         assert type(self.api_browserless.auth_key()) is str
@@ -94,8 +94,6 @@ class test_API_Browserless(TestCase):
         assert len(self.api_browserless.pages()) == 1
 
 
-
-
     #########
     # extra browserless features
 
@@ -106,42 +104,42 @@ class test_API_Browserless(TestCase):
     #     json_save_file(stats, file_target)
     #     pprint(stats)
 
-    def test_pdf(self):
-        url_target = 'https://www.google.com'
-        file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.pdf'
-        file_delete(file_target)
-        bytes  = self.api_browserless.pdf(url_target, width=1248)
-        if len(bytes) < 1000:
-            pprint(bytes)
-        else:
-            file_create_from_bytes(file_target, bytes)
-            pprint(f'saved pdf to: {file_target} with {len(bytes)} bytes')
-        assert file_exists(file_target)
-
-    def test_pdf_html(self):
-        html = self.html_bootstrap()
-        file_target = f'/tmp/browserless_screenshot__html.pdf'
-        file_create(file_target+'.html', html)
-        file_delete(file_target)
-        bytes  = self.api_browserless.pdf_html(html, width=2248)
-        if len(bytes) < 1000:
-            pprint(bytes)
-        else:
-            file_create_from_bytes(file_target, bytes)
-            pprint(f'saved pdf to: {file_target} with {len(bytes)} bytes')
-        assert file_exists(file_target)
-
-    def test_screenshot(self):
-        url_target = 'https://www.google.com'
-        file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.png'
-        file_delete(file_target)
-        bytes  = self.api_browserless.screenshot(url_target, width=1248)
-        if len(bytes) < 1000:
-            pprint(bytes)
-        else:
-            file_create_from_bytes(file_target, bytes)
-            pprint(f'saved screenshot to: {file_target} with {len(bytes)} bytes')
-        assert file_exists(file_target)
+    # def test_pdf(self):
+    #     url_target = 'https://www.google.com'
+    #     file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.pdf'
+    #     file_delete(file_target)
+    #     bytes  = self.api_browserless.pdf(url_target, width=1248)
+    #     if len(bytes) < 1000:
+    #         pprint(bytes)
+    #     else:
+    #         file_create_from_bytes(file_target, bytes)
+    #         pprint(f'saved pdf to: {file_target} with {len(bytes)} bytes')
+    #     assert file_exists(file_target)
+    #
+    # def test_pdf_html(self):
+    #     html = self.html_bootstrap()
+    #     file_target = f'/tmp/browserless_screenshot__html.pdf'
+    #     file_create(file_target+'.html', html)
+    #     file_delete(file_target)
+    #     bytes  = self.api_browserless.pdf_html(html, width=2248)
+    #     if len(bytes) < 1000:
+    #         pprint(bytes)
+    #     else:
+    #         file_create_from_bytes(file_target, bytes)
+    #         pprint(f'saved pdf to: {file_target} with {len(bytes)} bytes')
+    #     assert file_exists(file_target)
+    #
+    # def test_screenshot(self):
+    #     url_target = 'https://www.google.com'
+    #     file_target = f'/tmp/browserless_screenshot__{str_safe(url_target)}.png'
+    #     file_delete(file_target)
+    #     bytes  = self.api_browserless.screenshot(url_target, width=1248)
+    #     if len(bytes) < 1000:
+    #         pprint(bytes)
+    #     else:
+    #         file_create_from_bytes(file_target, bytes)
+    #         pprint(f'saved screenshot to: {file_target} with {len(bytes)} bytes')
+    #     assert file_exists(file_target)
 
 
 

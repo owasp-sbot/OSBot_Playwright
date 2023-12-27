@@ -6,24 +6,28 @@ import pytest
 from playwright.sync_api import sync_playwright
 
 from osbot_playwright.playwright.API_Browserless import API_Browserless
+from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+from osbot_playwright.playwright.Playwright_Page import Playwright_Page
 from osbot_playwright.playwright.Playwright_Requests import Playwright_Requests
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Files import file_exists
 from osbot_utils.utils.Json import json_save, json_load, json_save_file, json_load_file
 
 
-@pytest.mark.skip('remove browserless dependency')
+#@pytest.mark.skip('remove browserless dependency')
 class test_Playwright_Requests(TestCase):
-    api_browserless : API_Browserless
+    playwright_browser_chrome : Playwright_Browser__Chrome
+    page                      : Playwright_Page
 
     @classmethod
-    def setUpClass(cls) -> None:
-        cls.api_browserless = API_Browserless()
-        cls.page            = cls.api_browserless.new_page()
+    def setUpClass(cls):
+        cls.playwright_browser_chrome = Playwright_Browser__Chrome()
+        cls.page                      = cls.playwright_browser_chrome.new_page()
 
     @classmethod
-    def tearDownClass(cls) -> None:
-        cls.api_browserless.close()
+    def tearDownClass(cls):
+        assert cls.playwright_browser_chrome.stop_playwright_and_process() is True
+
 
     def setUp(self) -> None:
         self.playwrite_requests = Playwright_Requests()
@@ -44,14 +48,15 @@ class test_Playwright_Requests(TestCase):
             cache_file = json_save_file(_.requests.requests)
             pprint(cache_file)
 
-    def test_load_from(self):
-        file_with_captured_requests = '/var/folders/sj/ks1b_pjd749gk5ssdd1769kc0000gn/T/tmp299iiu8o.tmp'
-        assert len(self.playwrite_requests.requests) == 0
-        #requests = json_load_file(file_with_captured_requests)
-        #pprint(requests)
-        self.playwrite_requests.load_from(file_with_captured_requests)
-        assert len(self.playwrite_requests.requests) > 0
-        assert self.playwrite_requests.requests == json_load_file(file_with_captured_requests)
+
+    # def test_load_from(self):
+    #     file_with_captured_requests = '/var/folders/sj/ks1b_pjd749gk5ssdd1769kc0000gn/T/tmp299iiu8o.tmp'
+    #     assert len(self.playwrite_requests.requests) == 0
+    #     #requests = json_load_file(file_with_captured_requests)
+    #     #pprint(requests)
+    #     self.playwrite_requests.load_from(file_with_captured_requests)
+    #     assert len(self.playwrite_requests.requests) > 0
+    #     assert self.playwrite_requests.requests == json_load_file(file_with_captured_requests)
 
     def test_save_to(self):
         with self.page as _:
