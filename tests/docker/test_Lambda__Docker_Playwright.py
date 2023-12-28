@@ -19,6 +19,11 @@ class test_Lambda__Docker_Playwright(TestCase):
         lambda_function = self.lambda_docker.lambda_function()
         with Duration(prefix='create lambda:'):
             create_result   = self.lambda_docker.create_lambda(delete_existing=delete_existing, wait_for_active=wait_for_active)
+
+            pprint(create_result)
+
+            assert lambda_function.exists() is True
+
             lambda_info     = lambda_function.info()
             if delete_existing is True:
                 assert create_result.get('create_result').get('status') == 'ok'
@@ -56,6 +61,20 @@ class test_Lambda__Docker_Playwright(TestCase):
         #pprint(self.build_deploy.lambda_function().info())
         result = self.lambda_docker.update_lambda_function()
         assert result.get('State') == 'Active'
+
+
+    # def test_invoke_fast_api__docs(self):
+    #     payload = {'path': 'docs'}
+    #     result = self.lambda_docker.execute_lambda(payload=payload)
+    #     pprint(result)
+
+    #def test_invoke_lambda_shell(self):
+
+        # aws_lambda = self.lambda_docker.lambda_function()
+        # from osbot_aws.apis.shell.Shell_Client import Shell_Client
+        # lambda_client = Shell_Client(aws_lambda)
+        #
+        # pprint(lambda_client.ping())
 
     # def test_z_aws_publish(self):
     #     #build_result = self.build_docker.build_docker_image()       # make sure the image is built
