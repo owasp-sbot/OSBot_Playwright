@@ -22,9 +22,9 @@ class Lambda__Docker_Playwright:
     def create_lambda(self, delete_existing=False, wait_for_active=False):
         with Duration(prefix='[create_lambda] | delete and create:'):
             try:
-                image_architecture = self.image_architecture()
-                if image_architecture == 'amd64':
-                    image_architecture = 'x86_64'                               # in lambda functions the amd64 architecture is called x86_64
+                image_architecture = self.image_architecture()                  # im OSX this will be 'arm64' (for M1 chips)
+                if image_architecture == 'amd64':                               # in Linux this will be 'amd64'
+                    image_architecture = 'x86_64'                               # handled the case where in lambda functions the amd64 architecture is called x86_64
                 lambda_function              = self.lambda_function()
                 lambda_function.image_uri    = self.image_uri()
                 lambda_function.architecture = image_architecture

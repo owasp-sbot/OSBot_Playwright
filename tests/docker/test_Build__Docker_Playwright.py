@@ -41,6 +41,12 @@ class test_Build__Docker_Playwright(TestCase):
 
         assert folder_exists(create_image_ecr.path_images) is True
 
+    def test_aa_pull_image(self):
+        image_name = f'{self.aws_account_id}.dkr.ecr.eu-west-2.amazonaws.com/{self.build_docker.image_name}:latest'
+        self.build_docker.create_image_ecr.ecr_login()
+        result = self.build_docker.create_image_ecr.api_docker.client_docker().images.pull(image_name)
+        pprint(result)
+
     def test_build_docker_image(self):
         result = self.build_docker.build_docker_image()
         image  = result.get('image')
