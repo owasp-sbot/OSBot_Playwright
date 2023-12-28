@@ -1,3 +1,4 @@
+import os
 import platform
 
 
@@ -15,3 +16,6 @@ def in_linux():
 
 def in_windows():
     return current_os() == 'Windows'
+
+def in_github_actions():
+    return os.getenv('GITHUB_ACTIONS') == 'true'

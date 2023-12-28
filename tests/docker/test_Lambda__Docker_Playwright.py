@@ -1,8 +1,12 @@
 from unittest import TestCase
 
+import pytest
 import requests
+from osbot_aws.apis.shell.Lambda_Shell import Lambda_Shell
 from osbot_utils.testing.Duration import Duration
 from osbot_utils.utils.Dev import pprint
+from osbot_utils.utils.Functions import function_source_code
+from osbot_utils.utils.Json import json_dumps
 
 from osbot_playwright.docker.Build__Docker_Playwright import Build__Docker_Playwright
 from osbot_playwright.docker.Lambda__Docker_Playwright import Lambda__Docker_Playwright
@@ -68,10 +72,78 @@ class test_Lambda__Docker_Playwright(TestCase):
         assert result.get('State') == 'Active'
 
 
-    # def test_invoke_fast_api__docs(self):
-    #     payload = {'path': 'docs'}
-    #     result = self.lambda_docker.execute_lambda(payload=payload)
-    #     pprint(result)
+    def test_invoke_fast_api__docs(self):
+        payload = {
+            "httpMethod": "GET",
+            "path": "/docs",
+            #"path": "/openapi.json",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "queryStringParameters": {
+                "param1": "value1",
+                "param2": "value2"
+            },
+            "body": "{}"
+        }
+
+
+        result = self.lambda_docker.execute_lambda(payload=payload)
+        pprint(result)
+
+    @pytest.mark.skip('Fix tests')
+    def test_invoke_fast_api__lambda_shell(self):
+        def code():
+            from osbot_playwright.playwright.Playwright_Install import Playwright_Install
+            #playwright_install = Playwright_Install()
+
+
+            from osbot_playwright.playwright.Playwright_CLI import Playwright_CLI
+            playwright_cli = Playwright_CLI()
+            #return playwright_cli.install__chrome()
+            #return playwright_cli.executable_version__chrome()
+
+            from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+            playwright_browser_chrome = Playwright_Browser__Chrome()
+            return playwright_browser_chrome.browser_name
+
+            #return playwright_install.browsers_details()
+
+            # from playwright.sync_api import sync_playwright
+            # with sync_playwright() as playwright:
+            #     browser = playwright.chromium.launch()
+            #     page    = browser.new_page()
+            #     url = page.url
+            #     #page.goto('http://whatsmyuseragent.org/')
+            #     #page.screenshot(path='example.png')
+            #     browser.close()
+            #     return url
+            #return f"Playwright: {sync_playwright}"
+            #
+
+            #answer = 40 + 2123
+            #return answer
+
+        function_name = code.__name__
+        function_code = function_source_code(code)
+        exec_code     = f"{function_code}\nresult = {function_name}()"
+        lambda_shell = Lambda_Shell()
+        body={'method_name': 'python_exec', 'method_kwargs': {'code': exec_code},
+              'auth_key': lambda_shell.get_lambda_shell_auth()}
+
+        payload = {
+            "httpMethod": "POST",
+            "path": "/lambda-shell",
+            #"path": "/openapi.json",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": json_dumps(body)
+        }
+
+
+        result = self.lambda_docker.execute_lambda(payload=payload)
+        pprint(result)
 
     #def test_invoke_lambda_shell(self):
 

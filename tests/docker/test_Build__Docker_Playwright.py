@@ -7,6 +7,8 @@ from osbot_utils.testing.Duration                       import Duration
 from osbot_utils.utils.Dev                              import pprint
 from osbot_utils.utils.Files                            import folder_exists, folder_name, file_exists, file_name
 from osbot_utils.utils.Misc                             import wait_for
+
+from osbot_playwright._extra_methdos_osbot import in_github_actions
 from osbot_playwright.docker.Build__Docker_Playwright   import Build__Docker_Playwright
 
 
@@ -41,11 +43,12 @@ class test_Build__Docker_Playwright(TestCase):
 
         assert folder_exists(create_image_ecr.path_images) is True
 
-    def test_aa_pull_image(self):
-        image_name = f'{self.aws_account_id}.dkr.ecr.eu-west-2.amazonaws.com/{self.build_docker.image_name}:latest'
-        self.build_docker.create_image_ecr.ecr_login()
-        result = self.build_docker.create_image_ecr.api_docker.client_docker().images.pull(image_name)
-        pprint(result)
+    # def test_aa_pull_image(self):   # todo: see if this really adds value
+    #     if in_github_actions():
+    #         image_name = f'{self.aws_account_id}.dkr.ecr.eu-west-2.amazonaws.com/{self.build_docker.image_name}:latest'
+    #         self.build_docker.create_image_ecr.ecr_login()
+    #         result = self.build_docker.create_image_ecr.api_docker.client_docker().images.pull(image_name)
+    #         pprint(result)
 
     def test_build_docker_image(self):
         result = self.build_docker.build_docker_image()

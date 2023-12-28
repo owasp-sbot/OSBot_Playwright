@@ -3,9 +3,11 @@ git+https://github.com/owasp-sbot/OSBot-AWS.git@dev
 git+https://github.com/owasp-sbot/OSBot-Playwright.git@dev
 load_dotenv
 
+beautifulsoup4
 boto3
 pyyaml
 fastapi
 uvicorn
 playwright
+
 
