@@ -11,7 +11,7 @@ import osbot_playwright
 from osbot_playwright.docker.images.osbot_playwright.handler import run
 
 
-class Build_Deploy__Docker_Playwright:
+class Lambda__Docker_Playwright:
 
     def __init__(self):
         self.image_name       = 'osbot_playwright'
@@ -21,9 +21,6 @@ class Build_Deploy__Docker_Playwright:
 
     def api_docker(self):
         return self.create_image_ecr.api_docker
-
-    def build_docker_image(self):
-        return self.create_image_ecr.build_image()
 
     def create_container(self):
         port_bindings = {8000: 8888}
