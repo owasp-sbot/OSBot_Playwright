@@ -1,7 +1,7 @@
-from unittest                                       import TestCase
-from osbot_utils.utils.Files                        import folder_exists, parent_folder, current_temp_folder
-from osbot_utils.utils.Misc                         import list_set
-from osbot_playwright.playwright.Playwright_Install import Playwright_Install, SUPORTTED_BROWSERS
+from unittest                                           import TestCase
+from osbot_utils.utils.Files                            import folder_exists, parent_folder, current_temp_folder
+from osbot_utils.utils.Misc                             import list_set
+from osbot_playwright.playwright.api.Playwright_Install import Playwright_Install, SUPORTTED_BROWSERS
 
 
 class test_Playwright_Install(TestCase):

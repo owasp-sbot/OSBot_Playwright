@@ -4,7 +4,7 @@ from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Files import parent_folder, file_exists, files_list, files_find, files_recursive
 from osbot_utils.utils.Misc import list_set
 
-from osbot_playwright.playwright.Playwright_CLI import Playwright_CLI, VERSION_PLAYWRIGHT
+from osbot_playwright.playwright.api.Playwright_CLI import Playwright_CLI, VERSION_PLAYWRIGHT
 
 
 class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use AAA to make sure this is the first class to execute (making sure that chrome is installed

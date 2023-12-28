@@ -3,6 +3,7 @@ from unittest import TestCase
 import pytest
 from osbot_utils.utils.Dev import pprint
 
+from osbot_playwright._extra_methdos_osbot import in_github_actions
 from osbot_playwright.docker.ECR__Docker_Playwright import ECR__Docker_Playwright
 
 #@pytest.mark.skip('while debugging error')
@@ -16,5 +17,7 @@ class test_ECR__Docker_Playwright(TestCase):
         assert result is True
 
     def test_publish_docker_image(self):
-        result = self.ecr_docker.publish_docker_image()
-        pprint(result)
+        if in_github_actions():             # only publish when running in GitHub
+
+            result = self.ecr_docker.publish_docker_image()
+            pprint(result)

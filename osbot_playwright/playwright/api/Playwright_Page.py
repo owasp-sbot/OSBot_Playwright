@@ -1,6 +1,6 @@
 from playwright.sync_api                             import BrowserContext, Page
 from osbot_playwright.html_parser.Html_Parser        import Html_Parser
-from osbot_playwright.playwright.Playwright_Requests import Playwright_Requests
+from osbot_playwright.playwright.api.Playwright_Requests import Playwright_Requests
 
 TMP_FILE__PLAYWRIGHT_SCREENSHOT = '/tmp/playwright_screenshot.png'
 

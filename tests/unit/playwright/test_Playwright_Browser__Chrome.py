@@ -8,9 +8,9 @@ from osbot_utils.utils.Misc import list_set, obj_info, obj_data
 from playwright.sync_api import BrowserType, Browser, BrowserContext
 
 from osbot_playwright._extra_methdos_osbot import in_mac, in_linux
-from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
-from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.Playwright_Process import Playwright_Process
+from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
+from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+from osbot_playwright.playwright.api.Playwright_Process import Playwright_Process
 
 
 class test_Playwright_Browser__Chrome(TestCase):

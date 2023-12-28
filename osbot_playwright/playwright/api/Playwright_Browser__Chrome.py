@@ -1,8 +1,8 @@
 from osbot_utils.utils.Misc import random_port
-from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
-from osbot_playwright.playwright.Playwright_CLI     import Playwright_CLI
-from osbot_playwright.playwright.Playwright_Install import Playwright_Install
-from osbot_playwright.playwright.Playwright_Process import Playwright_Process
+from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
+from osbot_playwright.playwright.api.Playwright_CLI     import Playwright_CLI
+from osbot_playwright.playwright.api.Playwright_Install import Playwright_Install
+from osbot_playwright.playwright.api.Playwright_Process import Playwright_Process
 
 CHROME_BROWSER_NAME   = 'chromium'
 DEFAULT_HOST_ENDPOINT = 'http://localhost'
