@@ -18,10 +18,13 @@ class ECR__Docker_Playwright:
         return self.create_image_ecr.create_repository()
 
     def publish_docker_image(self):
-        if self.check_for_docker_docker_config_json():
+        if self.check_for_docker_config_json():
+            print('Docker config json not found, executing self.create_image_ecr.push_image()')
             return self.create_image_ecr.push_image()
+        print('Docker config json found, skipping publish_docker_image')
+        return self.create_image_ecr.push_image()
 
-    def check_for_docker_docker_config_json(self):              # todo: move this to OSBOT_Lambda code
+    def check_for_docker_config_json(self):              # todo: move this to OSBOT_Lambda code
         expected_docker_config = {'credsStore': 'desktop'}
         docker_config_json = path_combine(os.environ.get('HOME'), '.docker/config.json')
         if file_exists(docker_config_json):
