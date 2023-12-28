@@ -28,6 +28,8 @@ class Lambda__Docker_Playwright:
                 lambda_function              = self.lambda_function()
                 lambda_function.image_uri    = self.image_uri()
                 lambda_function.architecture = image_architecture
+                lambda_function.memory_size  = 5092
+                #lambda_function.sto = 5092
 
                 print('#'*100)
                 print(f'image_architecture: {image_architecture}')
