@@ -53,6 +53,11 @@ class test_Lambda__Docker_Playwright(TestCase):
         assert requests.get(function_url).json() == {'message': 'Hello from docked_playwright lambda!!!!!'}
 
 
+    # def test_image_architecture(self):
+    #     result = self.lambda_docker.create_image_ecr.ecr.client().describe_images(repositoryName='osbot_playwright', imageIds=[{'imageTag': 'latest'}])
+    #     #result = self.lambda_docker.create_image_ecr.docker_image.info()
+    #     pprint(result)
+
     def test_execute_lambda(self):
         result = self.lambda_docker.execute_lambda()
         assert result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
