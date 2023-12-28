@@ -15,7 +15,7 @@ def run():
 
 
     @app.get("/")
-    async def root():
+    def root():
         return {"message": "Hello from docked_playwright lambda!!!!!"}
 
     @app.post("/lambda-shell")
@@ -35,7 +35,7 @@ def run():
 
     @app.get("/version")
     def version():
-        return {"version": "v0.13"}
+        return {"version": "v0.14"}
 
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
