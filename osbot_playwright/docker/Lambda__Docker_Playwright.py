@@ -22,12 +22,15 @@ class Lambda__Docker_Playwright:
     def create_lambda(self, delete_existing=False, wait_for_active=False):
         with Duration(prefix='[create_lambda] | delete and create:'):
             try:
+                image_architecture = self.image_architecture()
+                if image_architecture == 'amd64':
+                    image_architecture = 'x86_64'                               # in lambda functions the amd64 architecture is called x86_64
                 lambda_function              = self.lambda_function()
                 lambda_function.image_uri    = self.image_uri()
-                lambda_function.architecture = self.image_architecture() or 'x86_64'         # for the cases when in GH Actions we don't have this value
+                lambda_function.architecture = image_architecture
 
                 print('#'*100)
-                print(f'image_architecture: {self.image_architecture()}')
+                print(f'image_architecture: {image_architecture}')
 
                 if delete_existing:
                     lambda_function.delete()
