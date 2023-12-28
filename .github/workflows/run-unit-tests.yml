@@ -15,14 +15,14 @@ jobs:
         uses: ./.github/actions/install-dependencies__unit
 
       - name: Run Tests - Unit
-        if  : false
+        #if  : false
         uses: ./.github/actions/run-tests__unit
         with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}
 
       # Tests - Integration
       - name: Run Tests - Integration
-        if  : false
+        #if  : false
         uses: ./.github/actions/run-tests__integration
         with:
           package_name          : ${{ secrets.PACKAGE_NAME          }}

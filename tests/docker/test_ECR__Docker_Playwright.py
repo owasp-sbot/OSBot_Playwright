@@ -5,7 +5,7 @@ from osbot_utils.utils.Dev import pprint
 
 from osbot_playwright.docker.ECR__Docker_Playwright import ECR__Docker_Playwright
 
-@pytest.mark.skip('while debugging error')
+#@pytest.mark.skip('while debugging error')
 class test_ECR__Docker_Playwright(TestCase):
 
     def setUp(self):
