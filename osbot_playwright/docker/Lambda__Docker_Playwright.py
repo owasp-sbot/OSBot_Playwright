@@ -1,3 +1,5 @@
+from osbot_utils.utils.Dev import pprint
+
 import osbot_playwright
 from osbot_aws.deploy.Deploy_Lambda                          import Deploy_Lambda
 from osbot_aws.helpers.Create_Image_ECR                      import Create_Image_ECR
@@ -19,17 +21,21 @@ class Lambda__Docker_Playwright:
 
     def create_lambda(self, delete_existing=False, wait_for_active=False):
         with Duration(prefix='[create_lambda] | delete and create:'):
-            lambda_function              = self.lambda_function()
-            lambda_function.image_uri    = self.image_uri()
-            lambda_function.architecture = self.image_architecture()
-            if delete_existing:
-                lambda_function.delete()
-            create_result = lambda_function.create()
-        if wait_for_active:
-            with Duration(prefix='[create_lambda] | wait for active:'):
-                lambda_function.wait_for_state_active(max_wait_count=80)
-        function_url = self.create_lambda_function_url()
-        return dict(create_result=create_result, function_url=function_url)
+            try:
+                lambda_function              = self.lambda_function()
+                lambda_function.image_uri    = self.image_uri()
+                lambda_function.architecture = self.image_architecture()
+                if delete_existing:
+                    lambda_function.delete()
+                create_result = lambda_function.create()
+                pprint(create_result)
+                if wait_for_active:
+                    with Duration(prefix='[create_lambda] | wait for active:'):
+                        lambda_function.wait_for_state_active(max_wait_count=80)
+                function_url = self.create_lambda_function_url()
+                return dict(create_result=create_result, function_url=function_url)
+            except Exception as error:
+                return {"status": "error", "error": error}
 
     def create_lambda_function_url(self):
         lambda_           = self.lambda_function()
