@@ -24,7 +24,7 @@ class Lambda__Docker_Playwright:
             try:
                 lambda_function              = self.lambda_function()
                 lambda_function.image_uri    = self.image_uri()
-                lambda_function.architecture = self.image_architecture() or 'amd64'         # for the cases when in GH Actions we don't have this value
+                lambda_function.architecture = self.image_architecture() or 'x86_64'         # for the cases when in GH Actions we don't have this value
 
                 print('#'*100)
                 print(f'image_architecture: {self.image_architecture()}')
