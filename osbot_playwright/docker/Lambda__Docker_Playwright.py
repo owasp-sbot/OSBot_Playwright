@@ -1,13 +1,8 @@
-import os
-
-from osbot_aws.deploy.Deploy_Lambda import Deploy_Lambda
-from osbot_aws.helpers.Create_Image_ECR import Create_Image_ECR
-from osbot_utils.testing.Duration import Duration
-from osbot_utils.utils.Dev import pprint
-from osbot_utils.utils.Files import file_contents, parent_folder, path_combine
-from osbot_utils.utils.Misc import wait_for
-
 import osbot_playwright
+from osbot_aws.deploy.Deploy_Lambda                          import Deploy_Lambda
+from osbot_aws.helpers.Create_Image_ECR                      import Create_Image_ECR
+from osbot_utils.testing.Duration                            import Duration
+from osbot_utils.utils.Files                                 import  path_combine
 from osbot_playwright.docker.images.osbot_playwright.handler import run
 
 
@@ -21,20 +16,6 @@ class Lambda__Docker_Playwright:
 
     def api_docker(self):
         return self.create_image_ecr.api_docker
-
-    def create_container(self):
-        port_bindings = {8000: 8888}
-        #labels        = {"source": "build_deploy__docker_playwright"}
-        return  self.api_docker().container_create(image_name=self.repository(), command='', port_bindings=port_bindings)
-
-    def created_containers(self):
-        created_containers = {}
-        repository = self.repository()
-
-        containers = self.api_docker().containers_all__with_image(repository)
-        for container in containers:
-            created_containers[container.container_id] = container
-        return created_containers
 
     def create_lambda(self, delete_existing=False, wait_for_active=False):
         with Duration(prefix='[create_lambda] | delete and create:'):
@@ -67,9 +48,6 @@ class Lambda__Docker_Playwright:
     def lambda_function(self):
         return self.deploy_lambda.lambda_function()
 
-    def dockerfile(self):
-        return file_contents(self.path_dockerfile())
-
     def image_uri(self):
         return f"{self.repository()}:latest"
 
@@ -82,11 +60,28 @@ class Lambda__Docker_Playwright:
     def repository(self):
         return self.create_image_ecr.image_repository()
 
-    def start_container(self):
-        container = self.create_container()
-        container.start()
-        return container
-
     def update_lambda_function(self):
         lambda_ = self.lambda_function()
         return lambda_.update_lambda_image_uri(self.image_uri())
+
+
+    # def build_docker_image(self):
+    #     return self.build_docker_image()
+
+
+
+    # def create_lambda_function(self, delete_existing=True, wait_for_active=True):
+    #     return self.create_lambda(delete_existing=delete_existing, wait_for_active=wait_for_active)
+
+    # def update_lambda_function(self, wait_for_update=True):
+    #     result = self.update_lambda_function()
+    #     if wait_for_update is False:
+    #         return result.get('LastUpdateStatus')
+    #     return self.lambda_function().wait_for_function_update_to_complete(wait_time=1)        # this takes a while so make the interval to be 1 sec before checks
+
+
+    # def rebuild_and_publish(self):
+    #     build_result   = self.build_docker_image()
+    #     publish_result = self.publish_docker_image()
+    #     update_result  = self.update_lambda_function()
+    #     return dict(build_result=build_result, publish_result=publish_result, update_result=update_result)

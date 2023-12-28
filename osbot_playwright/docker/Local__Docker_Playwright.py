@@ -18,7 +18,7 @@ class Local__Docker_Playwright:
         self.api_docker       = self.create_image_ecr.api_docker
         self.label_source     = 'local__docker_playwright'
         self.labels           = {'source': self.label_source}
-        self.volume_path      = path_combine(self.path_images, 'docker_playwright')
+        #self.volume_path      = path_combine(self.path_images, 'osbot_playwright')
         self.local_port       = 8888
         self.port_bindings    = {8000: self.local_port }
         # self.volumes          = { self.volume_path: { 'bind': '/var/task',
