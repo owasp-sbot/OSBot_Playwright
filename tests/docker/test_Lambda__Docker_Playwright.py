@@ -38,20 +38,25 @@ class test_Lambda__Docker_Playwright(TestCase):
                     assert create_result.get('create_result').get('status') == 'ok'
                 assert lambda_info.get('Configuration').get('State') == 'Active'
 
+            payload     = {'path': '/config/status', 'httpMethod': 'GET'}
+            http_status = '{"status":"ok"}'
             with Duration(prefix='invoke lambda 1st:'):
-                invoke_result   = lambda_function.invoke()
-                assert invoke_result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+
+                invoke_result   = lambda_function.invoke(payload)
+                assert invoke_result.get('body') == http_status
 
             with Duration(prefix='invoke lambda 2nd:'):
-                invoke_result   = lambda_function.invoke()
-                assert invoke_result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+                invoke_result   = lambda_function.invoke(payload)
+                assert invoke_result.get('body') == http_status
 
             with Duration(prefix='invoke lambda 3rd:'):
-                invoke_result   = lambda_function.invoke()
-                assert invoke_result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+                invoke_result   = lambda_function.invoke(payload)
+                assert invoke_result.get('body') == http_status
 
     def test_create_lambda_function_url(self):
         if in_github_actions():
+            path_status   = 'config/status'
+            http_status  = {"status":"ok"}
             result       = self.lambda_docker.create_lambda_function_url()
 
             function_url = result.get('FunctionUrl')
@@ -59,8 +64,15 @@ class test_Lambda__Docker_Playwright(TestCase):
             assert result.get('FunctionArn') == self.lambda_docker.deploy_lambda.lambda_function().function_arn()
             assert result.get('InvokeMode' ) == 'BUFFERED'
             assert function_url.endswith('.lambda-url.eu-west-2.on.aws/')
+            url = function_url + path_status
+            assert requests.get(url).json() == http_status
 
-            assert requests.get(function_url).json() == {'message': 'Hello from docked_playwright lambda!!!!!'}
+    def test_incoke_lambda_function_url(self):
+        path_status   = 'config/status'
+        http_status  = {"status":"ok"}
+        function_url = self.lambda_docker.lambda_function().function_url()
+        url = function_url + path_status
+        assert requests.get(url).json() == http_status
 
 
     # def test_image_architecture(self):
