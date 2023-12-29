@@ -98,11 +98,11 @@ class test_Build__Docker_Playwright(TestCase):
                 print(f'[{i}] waiting for Uvicorn running on in container logs')
                 wait_for(0.1)
 
-        url = "http://localhost:8888"
+        url = "http://localhost:8888/config/status"
 
         response = requests.get(url)
         assert response.status_code == 200
-        assert response.text == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+        assert response.json() == {"status":"ok"}
 
         assert container.stop() is True
         assert container.status() == 'exited'

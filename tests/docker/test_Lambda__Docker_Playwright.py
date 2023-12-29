@@ -69,14 +69,16 @@ class test_Lambda__Docker_Playwright(TestCase):
     #     pprint(result)
 
     def test_execute_lambda(self):
-        result = self.lambda_docker.execute_lambda()
-        assert result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+        payload = {'path': '/config/status', 'httpMethod': 'GET'}
+        result = self.lambda_docker.execute_lambda(payload)
+        assert result.get('body') == '{"status":"ok"}'
 
     def test_invoke_lambda_function(self):
         with Duration(prefix="Invoking Lambda function"):
+            payload = {'path': '/config/status', 'httpMethod': 'GET'}
             lambda_function = self.lambda_docker.lambda_function()
-            result = lambda_function.invoke()
-            assert result.get('body') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+            result = lambda_function.invoke(payload)
+            assert result.get('body') == '{"status":"ok"}'
 
     def test_update_lambda_function(self):
         #pprint(self.build_deploy.lambda_function().info())

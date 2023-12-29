@@ -70,10 +70,10 @@ class test_Local__Docker_Playwright(TestCase):
     #     pprint(self.local_docker.POST('/lambda-shell'), {})
 
     def test_z_GET(self):
-        assert self.local_docker.GET('/') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+        assert self.local_docker.GET('/config/status') == '{"status":"ok"}'
 
-    def test_z_fastapi__root(self):
-        assert self.local_docker.GET('/') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
+    # def test_z_fastapi__root(self):
+    #     assert self.local_docker.GET('/') == '{"message":"Hello from docked_playwright lambda!!!!!"}'
 
 
 
