@@ -18,6 +18,13 @@ from osbot_playwright.docker.Lambda__Docker_Playwright import Lambda__Docker_Pla
 
 class test_Lambda__Docker_Playwright(TestCase):
 
+    @classmethod
+    def setUpClass(cls) -> None:
+        lambda_docker = Lambda__Docker_Playwright()
+        lambda_function = lambda_docker.lambda_function()
+        if lambda_function.function_url_exists():
+            result = lambda_function.function_url_delete()
+
     def setUp(self):
         self.lambda_docker = Lambda__Docker_Playwright()
 
