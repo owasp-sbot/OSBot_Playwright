@@ -3,6 +3,7 @@ from unittest import TestCase
 from fastapi import FastAPI
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Misc import obj_info
+from starlette.testclient import TestClient
 
 from osbot_playwright.playwright.fastapi.Routes__Playwright import Routes__Playwright, ROUTES_PATHS__PLAYWRIGHT, \
     ROUTES_METHODS__PLAYWRIGHT
@@ -13,6 +14,17 @@ class test_Routes__Playwright(TestCase):
     def setUp(self):
         self.app =  FastAPI()
         self.routes_playwright = Routes__Playwright(self.app)
+
+    def test__client__code(self):
+        data = dict(auth_key ='123'  ,
+                    code     = 'abc' )
+        client = TestClient(self.app)
+        response = client.post('/playwright/code',json=data)
+        pprint(response.text)
+
+    # def test_code(self):
+    #     code = 'abc'
+    #     assert self.routes_playwright.code(code) == code
 
     def test_html(self):
         url    = 'https://httpbin.org/get'
