@@ -7,8 +7,9 @@ beautifulsoup4
 boto3
 pyyaml
 fastapi
-psutil
 uvicorn
 playwright
+
+#psutil  (doesn't easily add to image from mcr.microsoft.com/playwright/python:v1.40.0-jammy )
 
 

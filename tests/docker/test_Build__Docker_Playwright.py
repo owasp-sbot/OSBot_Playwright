@@ -52,6 +52,7 @@ class test_Build__Docker_Playwright(TestCase):
 
     def test_build_docker_image(self):
         result = self.build_docker.build_docker_image()
+        #pprint(result)
         image  = result.get('image')
         assert result.get('status'      )    == 'ok'
         assert result.get('tags'        )[0] == f'{self.aws_account_id}.dkr.ecr.eu-west-2.amazonaws.com/{self.build_docker.image_name}:latest'

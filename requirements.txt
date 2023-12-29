@@ -1,10 +1,18 @@
-# for OWSBot
+# for OWSBot-Utils
 git+https://github.com/owasp-sbot/OSBot-Utils.git@dev
+python-dotenv
+
+# for docker
 git+https://github.com/owasp-sbot/OSBot-AWS.git@dev
 git+https://github.com/owasp-sbot/OSBot-Docker.git@dev
-python-dotenv
 boto3
 docker
+
+# for fastapi
+git+https://github.com/owasp-sbot/OSBot-Fast-API.git@dev
+fastapi
+uvicorn
+httpx
 
 # for playwright
 playwright
@@ -13,8 +21,7 @@ psutil
 # for browserless
 requests
 
-# for fastapi
-fastapi
+
 
 # for testing
 pytest
