@@ -2,8 +2,8 @@ from unittest import TestCase
 
 import pytest
 from playwright.sync_api import Browser
-from osbot_playwright.playwright.API_Browserless import API_Browserless
-from osbot_playwright.playwright.Playwright_Page import Playwright_Page
+from osbot_playwright.playwright.api.API_Browserless import API_Browserless
+from osbot_playwright.playwright.api.Playwright_Page import Playwright_Page
 from osbot_utils.testing.Duration import Duration
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Files import file_create_from_bytes, file_exists, file_delete, file_create

@@ -6,6 +6,12 @@ python-dotenv
 playwright
 psutil
 
+# for fastapi
+git+https://github.com/owasp-sbot/OSBot-Fast-API.git@dev
+fastapi
+uvicorn
+httpx
+
 # for testing
 pytest
 coverage

@@ -9,8 +9,8 @@ from osbot_utils.utils.Json import json_load_file
 from osbot_utils.utils.Misc import list_set, random_port
 from osbot_utils.utils.Python_Logger import Python_Logger
 
-from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.Playwright_Process import Playwright_Process, FILE_PLAYWRIGHT_PROCESS, \
+from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+from osbot_playwright.playwright.api.Playwright_Process import Playwright_Process, FILE_PLAYWRIGHT_PROCESS, \
     FORMAT_CHROME_DATA_FOLDER, DEFAULT_VALUE_DEBUG_PORT
 
 

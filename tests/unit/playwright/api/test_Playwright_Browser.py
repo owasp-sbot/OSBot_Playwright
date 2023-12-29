@@ -9,10 +9,10 @@ from osbot_utils.utils.Files import file_exists
 from osbot_utils.utils.Misc import obj_info
 from playwright.sync_api import Playwright, BrowserType, Page, Error, BrowserContext
 
-from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
-from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.Playwright_Install import SUPORTTED_BROWSERS
-from osbot_playwright.playwright.Playwright_Page import Playwright_Page
+from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
+from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+from osbot_playwright.playwright.api.Playwright_Install import SUPORTTED_BROWSERS
+from osbot_playwright.playwright.api.Playwright_Page import Playwright_Page
 
 
 class test_Playwright_Browser(TestCase):

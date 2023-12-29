@@ -1,7 +1,7 @@
 from osbot_utils.utils.Python_Logger import Python_Logger
 from playwright.sync_api import sync_playwright, Browser,Error
 
-from osbot_playwright.playwright.Playwright_Page import Playwright_Page
+from osbot_playwright.playwright.api.Playwright_Page import Playwright_Page
 
 
 class Playwright_Browser:

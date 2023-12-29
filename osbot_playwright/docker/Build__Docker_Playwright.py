@@ -11,7 +11,7 @@ import osbot_playwright
 from osbot_playwright.docker.images.osbot_playwright.handler import run
 
 
-class Build_Deploy__Docker_Playwright:
+class Build__Docker_Playwright:
 
     def __init__(self):
         self.image_name       = 'osbot_playwright'

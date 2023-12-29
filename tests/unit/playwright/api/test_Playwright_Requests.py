@@ -1,10 +1,10 @@
-from unittest                                               import TestCase
-from osbot_playwright.playwright.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.Playwright_Page            import Playwright_Page
-from osbot_playwright.playwright.Playwright_Requests        import Playwright_Requests
-from osbot_utils.utils.Dev                                  import pprint
-from osbot_utils.utils.Files                                import file_exists
-from osbot_utils.utils.Json                                 import  json_save_file, json_load_file
+from unittest                                                   import TestCase
+from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
+from osbot_playwright.playwright.api.Playwright_Page            import Playwright_Page
+from osbot_playwright.playwright.api.Playwright_Requests        import Playwright_Requests
+from osbot_utils.utils.Dev                                      import pprint
+from osbot_utils.utils.Files                                    import file_exists
+from osbot_utils.utils.Json                                     import  json_save_file, json_load_file
 
 
 #@pytest.mark.skip('remove browserless dependency')

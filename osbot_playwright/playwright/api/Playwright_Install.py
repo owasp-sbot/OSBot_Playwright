@@ -3,7 +3,7 @@ from osbot_utils.utils.Files import file_exists, folder_exists, path_combine, fo
 from osbot_utils.utils.Json import json_file_load, json_save_file, json_load_file
 from playwright.sync_api import sync_playwright
 
-from osbot_playwright.playwright.Playwright_CLI import Playwright_CLI
+from osbot_playwright.playwright.api.Playwright_CLI import Playwright_CLI
 
 SUPORTTED_BROWSERS        = ['chromium', 'firefox', 'webkit']
 FILE_NAME_BROWSER_DETAILS = 'browsers_details.json'

@@ -1,11 +1,19 @@
 git+https://github.com/owasp-sbot/OSBot-Utils.git@dev
 git+https://github.com/owasp-sbot/OSBot-AWS.git@dev
 git+https://github.com/owasp-sbot/OSBot-Playwright.git@dev
-load_dotenv
+git+https://github.com/owasp-sbot/OSBot-Fast-API.git@dev
 
+beautifulsoup4
 boto3
-pyyaml
 fastapi
-uvicorn
+httpx
+load_dotenv
 playwright
+pyyaml
+uvicorn
+
+
+
+#psutil  (doesn't easily add to image from mcr.microsoft.com/playwright/python:v1.40.0-jammy )
+
 

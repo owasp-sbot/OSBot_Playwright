@@ -3,8 +3,8 @@ import os
 import requests
 from dotenv                                         import load_dotenv
 
-from osbot_playwright.playwright.Playwright_Browser import Playwright_Browser
-from osbot_playwright.playwright.Playwright_Page    import Playwright_Page
+from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
+from osbot_playwright.playwright.api.Playwright_Page    import Playwright_Page
 from osbot_utils.decorators.methods.cache_on_self   import cache_on_self
 from playwright.sync_api                            import sync_playwright
 
