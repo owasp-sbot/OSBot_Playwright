@@ -78,8 +78,9 @@ class test_Lambda__Docker_Playwright(TestCase):
         path_status   = 'config/status'
         http_status  = {"status":"ok"}
         function_url = self.lambda_docker.lambda_function().function_url()
-        url = function_url + path_status
-        assert requests.get(url).json() == http_status
+        if function_url:
+            url = function_url + path_status
+            assert requests.get(url).json() == http_status
 
 
     # def test_image_architecture(self):

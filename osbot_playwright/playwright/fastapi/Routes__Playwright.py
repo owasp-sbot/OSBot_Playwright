@@ -4,8 +4,8 @@ from starlette.responses import HTMLResponse, StreamingResponse
 
 from osbot_fast_api.api.Fast_API_Routes import Fast_API_Routes
 
-ROUTES_METHODS__PLAYWRIGHT = ['code'            ,'html'            , 'screenshot'            ]
-ROUTES_PATHS__PLAYWRIGHT   = ['/playwright/code','/playwright/html', '/playwright/screenshot']
+ROUTES_METHODS__PLAYWRIGHT = ['code'            ,'html'            , 'screenshot'                             ]
+ROUTES_PATHS__PLAYWRIGHT   = ['/playwright/code','/playwright/html', '/playwright/screenshot', '/shell-server']
 
 class CodeData(BaseModel):
     auth_key: str
@@ -21,7 +21,7 @@ class Routes__Playwright(Fast_API_Routes):
     def add_route_code(self):
         @self.router.post('/code')
         def code(code_data: CodeData):
-            return code_data
+            return 'not implemented'
 
     # def code(self, code):
     #     return code

@@ -10,5 +10,6 @@ class Fast_API_Playwright(Fast_API):
 
     def setup_routes(self, app=None):
         self.add_routes(Routes__Playwright)
+        self.add_shell_server()
 
 

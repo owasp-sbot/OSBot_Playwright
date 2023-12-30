@@ -17,5 +17,5 @@ class test_Fast_API_Playwright(TestCase):
 
     def test_routes(self):
         expected_routes = ['/'] + ROUTES_PATHS__CONFIG + ROUTES_PATHS__PLAYWRIGHT
-        routes = self.fast_api.routes_paths()
+        routes = self.fast_api.routes_paths(include_default=True)
         assert routes == sorted(expected_routes)
