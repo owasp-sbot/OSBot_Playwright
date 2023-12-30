@@ -79,6 +79,10 @@ class Lambda__Docker_Playwright:
         lambda_ = self.lambda_function()
         return lambda_.update_lambda_image_uri(self.image_uri())
 
+    def url_shell_server(self):
+        function_url = self.lambda_function().function_url()
+        if function_url:
+            return function_url + 'shell-server'
 
     # def build_docker_image(self):
     #     return self.build_docker_image()

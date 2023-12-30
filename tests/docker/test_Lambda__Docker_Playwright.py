@@ -3,13 +3,15 @@ from unittest import TestCase
 
 import pytest
 import requests
+from dotenv import load_dotenv
 from osbot_aws.apis.shell.Lambda_Shell import Lambda_Shell
+from osbot_fast_api.utils.http_shell.Http_Shell__Client import Http_Shell__Client
 from osbot_utils.testing.Duration import Duration
 from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Files import save_bytes_as_file, files_list
 from osbot_utils.utils.Functions import function_source_code
-from osbot_utils.utils.Json import json_dumps, json_parse
-from osbot_utils.utils.Misc import bytes_to_base64, base64_to_bytes
+from osbot_utils.utils.Json import json_dumps, json_parse, json_loads
+from osbot_utils.utils.Misc import bytes_to_base64, base64_to_bytes, list_set
 
 from osbot_playwright._extra_methdos_osbot import in_github_actions
 from osbot_playwright.docker.Build__Docker_Playwright import Build__Docker_Playwright
@@ -17,16 +19,25 @@ from osbot_playwright.docker.Lambda__Docker_Playwright import Lambda__Docker_Pla
 
 
 class test_Lambda__Docker_Playwright(TestCase):
+    lambda_docker : Lambda__Docker_Playwright()
 
     @classmethod
     def setUpClass(cls) -> None:
-        lambda_docker = Lambda__Docker_Playwright()
-        lambda_function = lambda_docker.lambda_function()
+        cls.lambda_docker = Lambda__Docker_Playwright()
+        cls.lambda_docker.create_lambda_function_url()
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        lambda_function = cls.lambda_docker.lambda_function()
         if lambda_function.function_url_exists():
-            result = lambda_function.function_url_delete()
+            lambda_function.function_url_delete()
 
     def setUp(self):
         self.lambda_docker = Lambda__Docker_Playwright()
+
+    def auth_key__shell_server(self):
+        load_dotenv()
+        return os.environ.get('HTTP_SHELL__AUTH_KEY')
 
     def test_create_lambda(self):
         if in_github_actions():
@@ -74,14 +85,50 @@ class test_Lambda__Docker_Playwright(TestCase):
             url = function_url + path_status
             assert requests.get(url).json() == http_status
 
-    def test_incoke_lambda_function_url(self):
+    def test_invoke_lambda_function_url(self):
         path_status   = 'config/status'
         http_status  = {"status":"ok"}
         function_url = self.lambda_docker.lambda_function().function_url()
-        if function_url:
-            url = function_url + path_status
-            assert requests.get(url).json() == http_status
+        #if function_url:
+        url = function_url + path_status
+        assert requests.get(url).json() == http_status
 
+    def test_invoke_lambda_function_url__shell_server(self):
+        shell_url    = self.lambda_docker.url_shell_server()
+        data         = { "auth_key": self.auth_key__shell_server(),
+                         "data"    : { "method_name": "ping",  "method_kwargs": {} } }
+        response     = requests.post(shell_url, json=data)
+        assert response.json().get('return_value') == 'pong'
+
+    def test_invoke_lambda_function_url__shell_client(self):
+        def the_answer(): return 40+2
+        shell_url    = self.lambda_docker.url_shell_server()
+        shell_client = Http_Shell__Client(shell_url)
+        assert shell_client.ping()                    == 'pong'
+        assert shell_client.exec_function(the_answer) == 42
+
+    def test_invoke_lambda_function_url__shell_client__get_env_vars(self):
+        def get_lambda_env_vars():
+            return dict(os.environ)
+
+        shell_url       = self.lambda_docker.url_shell_server()
+        shell_client    = Http_Shell__Client(shell_url)
+        lambda_env_vars = shell_client.exec_function(get_lambda_env_vars)
+        vars_names      = list_set(lambda_env_vars)
+        assert vars_names == [ 'AWS_ACCESS_KEY_ID', 'AWS_DEFAULT_REGION', 'AWS_EXECUTION_ENV',
+                               'AWS_LAMBDA_FUNCTION_MEMORY_SIZE', 'AWS_LAMBDA_FUNCTION_NAME', 'AWS_LAMBDA_FUNCTION_VERSION',
+                               'AWS_LAMBDA_INITIALIZATION_TYPE', 'AWS_LAMBDA_LOG_GROUP_NAME', 'AWS_LAMBDA_LOG_STREAM_NAME',
+                               'AWS_LAMBDA_RUNTIME_API', 'AWS_REGION', 'AWS_SECRET_ACCESS_KEY', 'AWS_SESSION_TOKEN',
+                               'AWS_XRAY_CONTEXT_MISSING', 'AWS_XRAY_DAEMON_ADDRESS', 'HTTP_SHELL__AUTH_KEY',
+                               'LAMBDA_RUNTIME_DIR', 'LAMBDA_TASK_ROOT', 'LC_CTYPE', 'PATH',
+                               'PLAYWRIGHT_BROWSERS_PATH',  'PORT', 'PWD', '_AWS_XRAY_DAEMON_ADDRESS',
+                               '_AWS_XRAY_DAEMON_PORT', '_HANDLER']
+        assert lambda_env_vars.get('AWS_EXECUTION_ENV'       ) == 'AWS_Lambda_Image'
+        assert lambda_env_vars.get('LAMBDA_RUNTIME_DIR'      ) == '/var/runtime'
+        assert lambda_env_vars.get('LAMBDA_TASK_ROOT'        ) == '/var/task'
+        assert lambda_env_vars.get('PORT'                    ) == '8000'
+        assert lambda_env_vars.get('PWD'                     ) == '/var/task'
+        assert lambda_env_vars.get('PLAYWRIGHT_BROWSERS_PATH') == '/ms-playwright'
 
     # def test_image_architecture(self):
     #     result = self.lambda_docker.create_image_ecr.ecr.client().describe_images(repositoryName='osbot_playwright', imageIds=[{'imageTag': 'latest'}])
@@ -123,7 +170,23 @@ class test_Lambda__Docker_Playwright(TestCase):
 
 
         result = self.lambda_docker.execute_lambda(payload=payload)
-        pprint(result)
+        assert '<title>FastAPI - Swagger UI</title>' in result.get('body')
+
+    def test_invoke_fast_api__shell_server(self):
+        load_dotenv()
+        auth_key  = os.environ.get('HTTP_SHELL__AUTH_KEY')
+        data      = { "auth_key"   : auth_key                                     ,
+                      "data"       : { "method_name": "ping", "method_kwargs": {} }}
+        payload   = { "httpMethod" : "POST"                                       ,
+                      "path"       : "/shell-server"                              ,
+                      "headers"    : { "Content-Type": "application/json"        },
+                      "body"       : json_dumps(data)                             }
+        result      = self.lambda_docker.execute_lambda(payload=payload)
+        result_body = json_loads(result.get('body'))
+        assert result.get     ('statusCode'  ) == 200
+        assert result_body.get('status'      ) == 'ok'
+        assert result_body.get('return_value') == 'pong'
+
 
 
     @pytest.mark.skip('see if we need this to start a process in Lambda')
