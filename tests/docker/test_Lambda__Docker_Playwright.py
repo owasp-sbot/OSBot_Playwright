@@ -24,7 +24,7 @@ class test_Lambda__Docker_Playwright(TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.lambda_docker = Lambda__Docker_Playwright()
-        cls.lambda_docker.create_lambda_function_url()
+        #cls.lambda_docker.create_lambda_function_url()
 
     @classmethod
     def tearDownClass(cls) -> None:
