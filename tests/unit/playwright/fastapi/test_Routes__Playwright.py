@@ -17,8 +17,10 @@ from osbot_playwright.playwright.fastapi.Routes__Playwright import Routes__Playw
 class test_Routes__Playwright(TestCase):
 
     def setUp(self):
-        self.app =  FastAPI()
+        self.app               =  FastAPI()
+        self.client            = TestClient(self.app)
         self.routes_playwright = Routes__Playwright(self.app)
+
 
     def auth_key(self):
         load_dotenv()
@@ -39,12 +41,10 @@ class test_Routes__Playwright(TestCase):
 
         data = dict(auth_key=self.auth_key(),
                     code=method_code)
-        client = TestClient(self.app)
-        response = client.post('/playwright/code', json=data)
+
+        response = self.client.post('/playwright/code', json=data)
         assert response.status_code == 200
         assert response.json() == expected_result
-        return
-
 
     def test_html(self):
         url      = 'https://httpbin.org/get'
