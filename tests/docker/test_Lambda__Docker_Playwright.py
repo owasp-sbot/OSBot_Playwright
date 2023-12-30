@@ -40,36 +40,35 @@ class test_Lambda__Docker_Playwright(TestCase):
         return os.environ.get('HTTP_SHELL__AUTH_KEY')
 
     def test_create_lambda(self):
-        if in_github_actions():
-            delete_existing = True
-            wait_for_active = True
-            lambda_function = self.lambda_docker.lambda_function()
+        delete_existing = True
+        wait_for_active = True
+        lambda_function = self.lambda_docker.lambda_function()
+
+        if True or in_github_actions():
             with Duration(prefix='create lambda:'):
                 create_result   = self.lambda_docker.create_lambda(delete_existing=delete_existing, wait_for_active=wait_for_active)
 
                 pprint(create_result)
 
                 assert lambda_function.exists() is True
-
                 lambda_info     = lambda_function.info()
                 if delete_existing is True:
                     assert create_result.get('create_result').get('status') == 'ok'
                 assert lambda_info.get('Configuration').get('State') == 'Active'
 
-            payload     = {'path': '/config/status', 'httpMethod': 'GET'}
-            http_status = '{"status":"ok"}'
-            with Duration(prefix='invoke lambda 1st:'):
+        payload     = {'path': '/config/status', 'httpMethod': 'GET'}
+        http_status = '{"status":"ok"}'
+        with Duration(prefix='invoke lambda 1st:'):
+            invoke_result   = lambda_function.invoke(payload)
+            assert invoke_result.get('body') == http_status
 
-                invoke_result   = lambda_function.invoke(payload)
-                assert invoke_result.get('body') == http_status
+        with Duration(prefix='invoke lambda 2nd:'):
+            invoke_result   = lambda_function.invoke(payload)
+            assert invoke_result.get('body') == http_status
 
-            with Duration(prefix='invoke lambda 2nd:'):
-                invoke_result   = lambda_function.invoke(payload)
-                assert invoke_result.get('body') == http_status
-
-            with Duration(prefix='invoke lambda 3rd:'):
-                invoke_result   = lambda_function.invoke(payload)
-                assert invoke_result.get('body') == http_status
+        with Duration(prefix='invoke lambda 3rd:'):
+            invoke_result   = lambda_function.invoke(payload)
+            assert invoke_result.get('body') == http_status
 
     def test_create_lambda_function_url(self):
         if in_github_actions():

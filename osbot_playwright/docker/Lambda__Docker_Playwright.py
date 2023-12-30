@@ -1,3 +1,7 @@
+import os
+
+from dotenv import load_dotenv
+from osbot_fast_api.utils.http_shell.Http_Shell__Server import ENV__HTTP_SHELL_AUTH_KEY
 from osbot_utils.utils.Dev import pprint
 
 import osbot_playwright
@@ -19,17 +23,23 @@ class Lambda__Docker_Playwright:
     def api_docker(self):
         return self.create_image_ecr.api_docker
 
+    def auth_key_lambda_shell(self):
+        load_dotenv()
+        return os.environ.get(ENV__HTTP_SHELL_AUTH_KEY)
+
     def create_lambda(self, delete_existing=False, wait_for_active=False):
         with Duration(prefix='[create_lambda] | delete and create:'):
             try:
-                image_architecture = self.image_architecture()                  # im OSX this will be 'arm64' (for M1 chips)
-                if image_architecture == 'amd64':                               # in Linux this will be 'amd64'
-                    image_architecture = 'x86_64'                               # handled the case where in lambda functions the amd64 architecture is called x86_64
+                # image_architecture = self.image_architecture()                  # im OSX this will be 'arm64' (for M1 chips)
+                # if image_architecture == 'amd64':                               # in Linux this will be 'amd64'
+                #     image_architecture = 'x86_64'                               # handled the case where in lambda functions the amd64 architecture is called x86_64
+                image_architecture = 'x86_64'                                     # for now only support building the docker image in GH which means that the image is 'x86_64'
                 lambda_function              = self.lambda_function()
                 lambda_function.image_uri    = self.image_uri()
                 lambda_function.architecture = image_architecture
-                lambda_function.memory_size  = 5092
-                #lambda_function.sto = 5092
+                lambda_function.memory       = 5092
+
+                lambda_function.set_env_variable(ENV__HTTP_SHELL_AUTH_KEY, self.auth_key_lambda_shell())
 
                 print('#'*100)
                 print(f'image_architecture: {image_architecture}')
