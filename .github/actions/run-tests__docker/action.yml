@@ -23,6 +23,9 @@ inputs:
   AWS_ACCOUNT_ID:
     description: 'AWS Account ID'
     required: true
+  HTTP_SHELL__AUTH_KEY:
+    description: 'HTTP_SHELL__AUTH_KEY'
+    required: true
 
 
 runs:
@@ -39,3 +42,4 @@ runs:
           AWS_ACCOUNT_ID       : ${{ inputs.AWS_ACCOUNT_ID        }}
           AWS_ACCESS_KEY_ID    : ${{ inputs.AWS_ACCESS_KEY_ID     }}
           BROWSERLESS__API_KEY : ${{ inputs.BROWSERLESS__API_KEY  }}
+          HTTP_SHELL__AUTH_KEY : ${{ inputs.HTTP_SHELL__AUTH_KEY  }}
