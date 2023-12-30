@@ -24,7 +24,7 @@ class test_Routes__Playwright(TestCase):
         load_dotenv()
         return os.environ.get(ENV__HTTP_SHELL_AUTH_KEY)
 
-    def test_client_code(self):
+    def test_code(self):
         expected_result = { 'result': { 'title': 'Error 404 (Not Found)!!1',
                             'url'   : 'https://www.google.com/404'}        ,
                             'status': 'ok'                                 }

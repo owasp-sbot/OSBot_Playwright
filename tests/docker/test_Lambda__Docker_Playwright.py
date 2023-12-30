@@ -44,7 +44,7 @@ class test_Lambda__Docker_Playwright(TestCase):
         wait_for_active = True
         lambda_function = self.lambda_docker.lambda_function()
 
-        if True or in_github_actions():
+        if in_github_actions():
             with Duration(prefix='create lambda:'):
                 create_result   = self.lambda_docker.create_lambda(delete_existing=delete_existing, wait_for_active=wait_for_active)
 
