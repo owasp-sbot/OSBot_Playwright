@@ -1,13 +1,9 @@
-from pprint import pprint
 from unittest import TestCase
 
 import pytest
-from osbot_utils.testing.Duration import Duration
-from osbot_utils.utils.Files import file_exists, folder_exists, current_temp_folder
-from osbot_utils.utils.Misc import list_set, obj_info, obj_data
+from osbot_utils.utils.Misc import list_set
+from osbot_utils.utils.Objects import obj_data
 from playwright.sync_api import BrowserType, Browser, BrowserContext
-
-from osbot_playwright._extra_methdos_osbot import in_mac, in_linux
 from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
 from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 from osbot_playwright.playwright.api.Playwright_Process import Playwright_Process

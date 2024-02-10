@@ -1,11 +1,8 @@
 from unittest import TestCase
 
-import pytest
-from osbot_utils.utils.Dev import pprint
-from osbot_utils.utils.Misc import random_text, obj_info
+from osbot_utils.utils.Misc import random_text
 from playwright.sync_api import Response
 from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
-from osbot_playwright.playwright.api.Playwright_Page import Playwright_Page
 
 
 class test_Playwright_Page(TestCase):

@@ -1,12 +1,7 @@
 from asyncio import unix_events
 from unittest import TestCase
 from unittest.mock import patch
-
-import pytest
-from osbot_utils.testing.Duration import Duration
-from osbot_utils.utils.Dev import pprint
 from osbot_utils.utils.Files import file_exists
-from osbot_utils.utils.Misc import obj_info
 from playwright.sync_api import Playwright, BrowserType, Page, Error, BrowserContext
 
 from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser

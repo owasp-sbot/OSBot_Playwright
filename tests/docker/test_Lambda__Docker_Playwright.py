@@ -85,14 +85,19 @@ class test_Lambda__Docker_Playwright(TestCase):
             assert requests.get(url).json() == http_status
 
     def test_invoke_lambda_function_url(self):
+        if not in_github_actions():
+            return  # 'skipping test in local environment'
         path_status   = 'config/status'
         http_status  = {"status":"ok"}
         function_url = self.lambda_docker.lambda_function().function_url()
+
         #if function_url:
         url = function_url + path_status
         assert requests.get(url).json() == http_status
 
     def test_invoke_lambda_function_url__shell_server(self):
+        if not in_github_actions():
+            return # 'skipping test in local environment'
         shell_url    = self.lambda_docker.url_shell_server()
         data         = { "auth_key": self.auth_key__shell_server(),
                          "data"    : { "method_name": "ping",  "method_kwargs": {} } }
@@ -100,6 +105,8 @@ class test_Lambda__Docker_Playwright(TestCase):
         assert response.json().get('return_value') == 'pong'
 
     def test_invoke_lambda_function_url__shell_client(self):
+        if not in_github_actions():
+            return  # 'skipping test in local environment'
         def the_answer(): return 40+2
         shell_url    = self.lambda_docker.url_shell_server()
         shell_client = Http_Shell__Client(shell_url)
@@ -107,6 +114,8 @@ class test_Lambda__Docker_Playwright(TestCase):
         assert shell_client.exec_function(the_answer) == 42
 
     def test_invoke_lambda_function_url__shell_client__get_env_vars(self):
+        if not in_github_actions():
+            return # 'skipping test in local environment'
         def get_lambda_env_vars():
             return dict(os.environ)
 
