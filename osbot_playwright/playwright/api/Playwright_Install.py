@@ -8,6 +8,7 @@ from osbot_playwright.playwright.api.Playwright_CLI import Playwright_CLI
 SUPORTTED_BROWSERS        = ['chromium', 'firefox', 'webkit']
 FILE_NAME_BROWSER_DETAILS = 'browsers_details.json'
 
+# todo: handle better the case when the browser is updated and the FILE_NAME_BROWSER_DETAILS is out of date
 class Playwright_Install:
 
     def __init__(self):

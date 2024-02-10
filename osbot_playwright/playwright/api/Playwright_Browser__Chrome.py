@@ -7,6 +7,10 @@ from osbot_playwright.playwright.api.Playwright_Process import Playwright_Proces
 CHROME_BROWSER_NAME   = 'chromium'
 DEFAULT_HOST_ENDPOINT = 'http://localhost'
 
+
+# todo: handle better the case when the browser is updated and the FILE_NAME_BROWSER_DETAILS is out of date
+#       in that case run:
+#            self.playwright_browser_chrome.playwright_install.browsers_details(reset_data=True)
 class Playwright_Browser__Chrome(Playwright_Browser):
 
     def __init__(self, port=None, headless=True):
