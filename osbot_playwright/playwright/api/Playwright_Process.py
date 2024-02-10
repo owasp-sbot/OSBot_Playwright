@@ -19,6 +19,8 @@ CHROMIUM_PROCESS_NAME      = 'Chromium'
 CHROMIUM_PARAM_DEBUG_PORT  = "--remote-debugging-port"
 CHROMIUM_PARAM_DATA_FOLDER = "--user-data-dir"
 CHROMIUM_PARAM_HEADLESS    = "--headless"
+CHROMIUM_USE_MOCK_KEYCHAIN = "--use-mock-keychain"          # to prevent the blocking permissions dialog about: "Chrome wants to use your confidential information stored .."
+# for more chrome launched options see https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
 
 class Playwright_Process:
 
@@ -146,8 +148,10 @@ class Playwright_Process:
             raise Exception("[Playwright_Process] in start_process the browser_path value was not set")
 
         browser_data_folder = self.path_data_folder()
-        params = [self.browser_path, f'{CHROMIUM_PARAM_DEBUG_PORT}={self.debug_port}'      ,
-                                     f'{CHROMIUM_PARAM_DATA_FOLDER}={browser_data_folder}' ]
+        params = [ self.browser_path                                    ,
+                  f'{CHROMIUM_PARAM_DEBUG_PORT}={self.debug_port}'      ,
+                  f'{CHROMIUM_PARAM_DATA_FOLDER}={browser_data_folder}' ,
+                   CHROMIUM_USE_MOCK_KEYCHAIN                           ]
 
         if self.headless:
             params.append(CHROMIUM_PARAM_HEADLESS)
