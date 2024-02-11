@@ -1,10 +1,17 @@
 from osbot_utils.utils.Json import json_load_file, json_save_file
+from osbot_utils.utils.Objects import obj_info
 
 
 class Playwright_Requests:
 
     def __init__(self):
         self.requests = []
+        self.frames   = []
+
+    def capture_frame(self, frame):
+        frame = { 'name' : frame.name,
+                  'url'  : frame.url }
+        self.frames.append(frame)
 
     def capture_request(self, request):
         request = { 'frame'          : {'name': request.frame.name,

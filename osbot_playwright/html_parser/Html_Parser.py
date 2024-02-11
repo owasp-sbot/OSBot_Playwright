@@ -1,12 +1,14 @@
 from bs4 import BeautifulSoup
 
+from osbot_utils.decorators.lists.index_by import index_by
 from osbot_utils.utils.Json import json_parse
 
 
 class Html_Parser:
 
     def __init__(self, data):
-        self.soup = BeautifulSoup(data, 'html.parser')
+        self.raw_data = data
+        self.soup     = BeautifulSoup(self.raw_data, 'html.parser')
 
     def __enter__(self): return self
     def __exit__ (self, type, value, traceback): pass
@@ -47,6 +49,8 @@ class Html_Parser:
             if element.get(attribute_name):
                 element_dict = { key_name: element[attribute_name],
                                 'text'   : element.get_text()     }
+                if element.get('id'):
+                    element_dict['id'] = element.get('id')
                 matches.append(element_dict)
         return matches
 
@@ -68,6 +72,12 @@ class Html_Parser:
 
     def ids__text(self, id_to_find):
         return [tag.text for tag in self.find_all(id=id_to_find)]
+
+    def info(self):                                         # todo: see what error handling we need to add here
+        info = dict(size      = len(self.raw_data),
+                    text_size = len(self.text())  ,
+                    title     = self.title()      )
+        return info
 
     def json(self):
         return json_parse(self.text())
@@ -109,6 +119,7 @@ class Html_Parser:
         if match:
             return match.text
 
+    @index_by
     def tags__attrs(self, tag):
         elements = self.soup.find_all(tag)
         result = []
@@ -126,6 +137,17 @@ class Html_Parser:
     def tags__text(self, tag):
         return [tag.text.strip() for tag in self.find_all(tag)] # todo: refactor to handle case when tag.text is None
 
+    def tags__stats(self):
+        stats = {}
+        for tag in self.soup.find_all(True):
+            tag_name = tag.name
+            if tag_name in stats:
+                stats[tag_name] += 1
+            else:
+                stats[tag_name] = 1
+        return stats
+
+
     def text(self):
         return self.body().text
 
@@ -136,8 +158,12 @@ class Html_Parser:
     def options(self):
         return self.extract_elements('option', 'value', 'value')
 
+    @index_by
     def hrefs(self):
         return self.extract_elements('a', 'href', 'href')
+
+    def hrefs__texts(self):
+        return [link['text'] for link in self.hrefs()]
 
     def hrefs__values(self):
         return [link['href'] for link in self.hrefs()]

@@ -1,6 +1,9 @@
+from urllib.parse import urlparse, parse_qs
+
 from playwright.sync_api                             import BrowserContext, Page
 from osbot_playwright.html_parser.Html_Parser        import Html_Parser
 from osbot_playwright.playwright.api.Playwright_Requests import Playwright_Requests
+from osbot_utils.utils.Dev import pprint
 
 TMP_FILE__PLAYWRIGHT_SCREENSHOT = '/tmp/playwright_screenshot.png'
 
@@ -17,10 +20,16 @@ class Playwright_Page:
     def __repr__(self):
         return f'[Playwright_Page]: {self.page.url}'
 
+    def capture_frames(self):                                   # todo figure out a way to capture the requests that occur on these pages
+        def capture_frame(frame):
+            self.requests.capture_frame(frame)
+        self.page.on("framenavigated", capture_frame)
+
     def capture_requests(self):
         def capture_request(request):
             self.requests.capture_request(request)
         self.page.on("requestfinished", capture_request)
+
 
         # todo: add support for more events
         #
@@ -53,14 +62,24 @@ class Playwright_Page:
     def goto(self, *args, **kwargs):
         return self.page.goto(*args, **kwargs)
 
+    def info(self):
+        data = dict(url = self.url_info(), html=self.html_info())
+        return data
+
     def json(self):
         return self.html().json()
+
+
+
+    def html(self):
+        return Html_Parser(self.html_raw())
+
+    def html_info(self):
+        return self.html().info()
 
     def html_raw(self):
         return self.page.content()
 
-    def html(self):
-        return Html_Parser(self.html_raw())
 
     def title(self):
         return self.page.title()
@@ -89,8 +108,28 @@ class Playwright_Page:
     def set_html(self, html):
         self.page.set_content(html)
         return self
+
     def url(self):
         return self.page.url
+
+    def url_info(self):
+        url        = self.url()
+        parsed_url = urlparse(url)
+
+        query_params_raw = parse_qs(parsed_url.query)
+        query_params     = {k: v[0] if len(v) == 1 else v for k, v in query_params_raw.items()}        # converts query string arrays to single values
+
+        url_info   = { 'raw'         : url                 ,
+                       'scheme'      : parsed_url.scheme   ,
+                       'host'        : parsed_url.hostname ,
+                       'port'        : parsed_url.port     ,
+                       'path'        : parsed_url.path     ,
+                       'params'      : parsed_url.params   ,
+                       'query_raw'   : parsed_url.query    ,
+                       'query_params': query_params        ,
+                       'fragment'    : parsed_url.fragment }
+        return url_info
+
 
     # todo: add method to wrap this selector
     # def get_images(page):
