@@ -30,6 +30,11 @@ class Playwright_Page:
             self.requests.capture_request(request)
         self.page.on("requestfinished", capture_request)
 
+    def capture_routes(self, selector="**/*"):
+        def capture_route(route, request):
+            self.requests.capture_route(route, request)
+
+        self.page.route(selector, capture_route)
 
         # todo: add support for more events
         #
@@ -51,6 +56,8 @@ class Playwright_Page:
         # response          : Emitted when a network response is received.
         # websocket         : Emitted when the page creates a WebSocket connection.
         # worker            : Emitted when a Web Worker is created by the page.
+
+
 
     def close(self):
         self.page.close()

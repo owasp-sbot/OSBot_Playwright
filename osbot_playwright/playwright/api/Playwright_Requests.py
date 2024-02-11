@@ -7,6 +7,7 @@ class Playwright_Requests:
     def __init__(self):
         self.requests = []
         self.frames   = []
+        self.routes   = []
 
     def capture_frame(self, frame):
         frame = { 'name' : frame.name,
@@ -26,6 +27,14 @@ class Playwright_Requests:
                     'timing'         : request.timing               ,
                     'url'            : request.url                  }
         self.requests.append(request)
+
+    def capture_route(self, route, request ):
+        #self.routes.append({'route' : route, 'request': request})
+        self.routes.append(route)
+        if False:
+            route.abort()               # todo add support for blocking requests
+        else:
+            route.continue_()
 
     def load_from(self, path):
         self.requests = json_load_file(path)
