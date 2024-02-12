@@ -174,7 +174,7 @@ class Html_Parser:
         return [paragraph.text.strip() for paragraph in self.find_all("p")]
 
     def title(self):
-        return self.soup.title.string if self.soup.title else None
+        return str(self.soup.title.string) if self.soup.title else None
 
     def __repr__(self):
         return self.soup.prettify()
