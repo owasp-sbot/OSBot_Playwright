@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 
 from osbot_utils.decorators.lists.index_by import index_by
 from osbot_utils.utils.Json import json_parse
+from osbot_utils.utils.Str import trim
 
 
 class Html_Parser:
@@ -175,6 +176,9 @@ class Html_Parser:
 
     def title(self):
         return str(self.soup.title.string) if self.soup.title else None
+
+    def title_trimmed(self):
+        return trim(self.title())
 
     def __repr__(self):
         return self.soup.prettify()
