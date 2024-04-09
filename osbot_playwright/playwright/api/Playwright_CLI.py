@@ -7,7 +7,7 @@ from osbot_utils.utils.Process import exec_process
 
 
 FOLDER_NAME_PLAYWRIGHT_BROWSERS = "osbot_playwright_browsers"
-VERSION_PLAYWRIGHT              = "Version 1.41.2"
+VERSION_PLAYWRIGHT              = "Version 1.43.0"
 
 class Playwright_CLI:
 
