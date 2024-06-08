@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "osbot_playwright"
-version     = "vv0.6.9"
+version     = "v0.6.9"
 description = "OWASP Security Bot - Playwright"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "MIT"
