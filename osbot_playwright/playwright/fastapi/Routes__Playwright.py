@@ -21,9 +21,7 @@ class Auth_Exception(Exception):                    # refactor to Http_Shell__Se
         self.message = message
 
 class Routes__Playwright(Fast_API_Routes):
-
-    def __init__(self,app):
-        super().__init__(app, 'playwright')
+    tag : str =  'playwright'
 
     def add_error_handler(self):
         @self.app.exception_handler(Auth_Exception)
