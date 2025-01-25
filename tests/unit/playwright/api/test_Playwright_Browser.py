@@ -1,6 +1,9 @@
 from asyncio                                                    import unix_events
 from unittest                                                   import TestCase
 from unittest.mock                                              import patch
+
+from osbot_utils.utils.Env import in_github_action
+
 from osbot_utils.utils.Files                                    import file_exists
 from playwright.sync_api                                        import Playwright, BrowserType, Page, Error, BrowserContext
 from osbot_playwright.playwright.api.Playwright_Browser         import Playwright_Browser
@@ -16,8 +19,9 @@ class test_Playwright_Browser(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        import pytest
-        pytest.skip("Playwright tests started to fail in GH Actions")  # todo: fix this
+        if in_github_action():
+            import pytest
+            pytest.skip("Playwright tests started to fail in GH Actions")  # todo: fix this
 
         cls.headless = True
         cls.playwright_browser_chrome = Playwright_Browser__Chrome(headless=cls.headless)

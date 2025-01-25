@@ -1,7 +1,8 @@
-from unittest import TestCase
+from unittest                                                   import TestCase
 
-from osbot_utils.utils.Misc import random_text
-from playwright.sync_api import Response
+from osbot_playwright._extra_methdos_osbot import in_github_actions
+from osbot_utils.utils.Misc                                     import random_text
+from playwright.sync_api                                        import Response
 from osbot_playwright.playwright.api.Playwright_Browser__Chrome import Playwright_Browser__Chrome
 
 
@@ -12,8 +13,9 @@ class test_Playwright_Page(TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        import pytest
-        pytest.skip("Playwright tests started to fail in GH Actions")  # todo: fix this
+        if in_github_actions():
+            import pytest
+            pytest.skip("Playwright tests started to fail in GH Actions")  # todo: fix this
         cls.headless = True
         cls.playwright_browser_chrome = Playwright_Browser__Chrome(headless=cls.headless)
 

@@ -1,8 +1,7 @@
-from bs4 import BeautifulSoup
-
-from osbot_utils.decorators.lists.index_by import index_by
-from osbot_utils.utils.Json import json_parse
-from osbot_utils.utils.Str import trim
+from bs4                                    import BeautifulSoup
+from osbot_utils.decorators.lists.index_by  import index_by
+from osbot_utils.utils.Json                 import json_parse
+from osbot_utils.utils.Str                  import trim
 
 
 class Html_Parser:
