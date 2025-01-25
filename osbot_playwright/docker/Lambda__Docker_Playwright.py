@@ -1,6 +1,7 @@
 import os
 
-from dotenv import load_dotenv
+from osbot_utils.utils.Env import load_dotenv
+
 from osbot_fast_api.utils.http_shell.Http_Shell__Server import ENV__HTTP_SHELL_AUTH_KEY
 from osbot_utils.utils.Dev import pprint
 

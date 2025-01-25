@@ -1,12 +1,9 @@
 import os
 
-import requests
-from dotenv                                         import load_dotenv
+from osbot_utils.utils.Env import load_dotenv
 
 from osbot_playwright.playwright.api.Playwright_Browser import Playwright_Browser
-from osbot_playwright.playwright.api.Playwright_Page    import Playwright_Page
 from osbot_utils.decorators.methods.cache_on_self   import cache_on_self
-from playwright.sync_api                            import sync_playwright
 
 class API_Browserless(Playwright_Browser):
 
