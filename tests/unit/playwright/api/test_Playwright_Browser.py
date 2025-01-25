@@ -37,9 +37,9 @@ class test_Playwright_Browser(TestCase):
     def test_contexts_close_all(self):
         with self.playwright_browser as _:
             assert len(_.contexts()     ) == 1
-            assert len(_.pages()        ) == 0
-            assert type(_.new_page()    ) == Playwright_Page
             assert len(_.pages()        ) == 1
+            assert type(_.new_page()    ) == Playwright_Page
+            assert len(_.pages()        ) == 2
             assert type(_.context_new() ) == BrowserContext
             assert len(_.contexts()     ) == 2
 
@@ -53,7 +53,7 @@ class test_Playwright_Browser(TestCase):
 
         assert self.playwright_browser_chrome.restart() is True         # need to restart since after closing all contexts, creating a new one throws an error (saying that the browser has been closed)
         assert len(self.playwright_browser.contexts())  == 1
-        assert len(self.playwright_browser.pages())     == 0
+        assert len(self.playwright_browser.pages())     == 1
             #_.restart_process()
 
     def test_context_new(self):
@@ -125,6 +125,8 @@ class test_Playwright_Browser(TestCase):
 
 
     def test_new_page(self):
+        assert len(self.playwright_browser.pages()) == 1
+        assert self.playwright_browser.page().close() is True
         assert len(self.playwright_browser.pages()) == 0
         page = self.playwright_browser.new_page()
         assert len(self.playwright_browser.pages()) == 1

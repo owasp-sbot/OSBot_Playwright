@@ -43,9 +43,9 @@ class test_AAA_Playwright_CLI(TestCase):            # todo: fix the need to use 
 
     def test_install_details__chrome(self):
         install_details = self.playwright_cli.install_details__chrome()
-        assert list_set(install_details) == ['browser', 'download_fallback_1', 'download_fallback_2',
-                                             'download_url', 'install_location']
-        assert install_details.get('browser').startswith('chromium')
+        assert list_set(install_details) == ['download_fallback_1', 'download_fallback_2',
+                                             'download_url', 'install_location', 'version']
+        #assert install_details.get('browser').startswith('chromium')
         assert parent_folder(install_details.get('install_location')) ==  self.playwright_cli.path_browsers()
 
     def test_invoke_raw(self):

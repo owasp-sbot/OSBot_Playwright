@@ -16,13 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Poetry - Install Dependencies
-        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__install@dev
-        with:
-          pip_install: '-r requirements-test.txt'
+        # Tests - Unit
+      - name: Install Dependencies (for tests - Unit)
+        uses: ./.github/actions/install-dependencies__unit
 
-      - name: Run Unit Tests (using Poetry)
-        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
+      - name: Run Tests - Unit
+        #if  : false
+        uses: ./.github/actions/run-tests__unit
+        with:
+          package_name          : ${{ secrets.PACKAGE_NAME          }}
+          HTTP_SHELL__AUTH_KEY  : ${{ secrets.HTTP_SHELL__AUTH_KEY  }}
+
+
+#      - name: Poetry - Install Dependencies
+#        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__install@dev
+#        with:
+#          pip_install: '-r requirements-test.txt'
+
+#      - name: Run Unit Tests (using Poetry)
+#        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
 
 #      - name: Run Integrations Tests (using Poetry)
 #        uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/poetry__run-unit-tests@dev
